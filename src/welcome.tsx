@@ -1,13 +1,9 @@
 import { Box, Center, Image, Text, VStack } from "@chakra-ui/react";
-import { useState } from "react";
 import { LButton, ZStack } from "@/components";
-import Home from "./home";
+import { Link } from "react-router-dom";
 
 function Welcome() {
-  const [showHome, setHome] = useState(false);
-  return showHome ? (
-    Home()
-  ) : (
+  return (
     <ZStack width="100%" height="100%">
       <Image
         width="100%"
@@ -19,17 +15,19 @@ function Welcome() {
       <Center width="100%" height="100%">
         <VStack>
           <Text
-            fontSize="48"
+            fontSize="48px"
             fontWeight="bold"
-            textShadow="dark-lg"
+            textShadow="5px 5px 10px rgba(0,0,0,0.3)"
             color="white"
           >
             NFT Chocolate
           </Text>
           <Box h="4"></Box>
-          <LButton color="white" bg="black" onClick={() => setHome(true)}>
-            Mint now
-          </LButton>
+          <Link to="/home">
+            <LButton color="#3478f6" bg="#dceafd">
+              Mint now
+            </LButton>
+          </Link>
         </VStack>
       </Center>
     </ZStack>

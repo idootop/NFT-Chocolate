@@ -3,16 +3,29 @@ import { Button } from "@chakra-ui/react";
 export const LButton = (p: {
   bg?: string;
   color?: string;
-  onClick: () => any;
+  onClick?: () => any;
   children: string;
-}) => (
-  <Button
-    borderRadius="15"
-    color={p.color ?? "white"}
-    bg={p.bg ?? "black"}
-    _hover={{ border: "2px solid " + (p.color ?? "white") }}
-    onClick={() => p.onClick()}
-  >
-    Mint now
-  </Button>
-);
+}) => {
+  const { bg = "balck", color = "white" } = p;
+  return (
+    <Button
+      height="40px"
+      padding="0 20px"
+      borderRadius="1rem"
+      fontSize="16px"
+      fontWeight="bold"
+      color={color}
+      border="0"
+      bg={bg}
+      cursor="pointer"
+      transitionDuration=".15s"
+      transitionTimingFunction="ease-in-out"
+      _hover={{
+        shadow: "0 0 0 4px " + bg,
+      }}
+      onClick={() => p.onClick?.()}
+    >
+      {p.children}
+    </Button>
+  );
+};
