@@ -24,6 +24,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
+    "stook": "^1.11.0",
     "typescript": "^4.4.2",
     "wagmi": "^0.2.28"
   },

@@ -1,5 +1,5 @@
-import { Box, Center, Image, Text, VStack } from "@chakra-ui/react";
 import { LButton, ZStack } from "@/components";
+import { Box, Center, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 function Welcome() {

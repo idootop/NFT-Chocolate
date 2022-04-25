@@ -1,10 +1,10 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Welcome from "./welcome";
-import "./index.css";
 import Home from "./home";
+import "./index.css";
+import Welcome from "./welcome";
 
 function App() {
   return Home();
