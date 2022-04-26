@@ -46,7 +46,7 @@ function AllNFT() {
   return (
     <Center h="100%">
       <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        All NFT
+        All NFT {process.env.INFURA_API_KEY} 123
       </Text>
     </Center>
   );

@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = function override(config) {
   const fallback = config.resolve.fallback || {};
@@ -16,12 +17,13 @@ module.exports = function override(config) {
     "@": path.resolve(__dirname, "src"),
   };
   config.resolve.fallback = fallback;
-  config.ignoreWarnings = [/Failed to parse source map/];
+  config.ignoreWarnings = [/Failed to parse source map/, /Conflicting values/];
   config.plugins = (config.plugins || []).concat([
     new webpack.ProvidePlugin({
       process: "process/browser",
       Buffer: ["buffer", "Buffer"],
     }),
+    new Dotenv(),
   ]);
   config.module.rules.push({
     test: /\.m?js/,
