@@ -9,11 +9,11 @@ import { connectors } from "./utils";
 import Welcome from "./welcome";
 
 function App() {
-  return (
-    <Provider autoConnect connectors={connectors}>
-      {Home()}
-    </Provider>
-  );
+  // return (
+  //   <Provider autoConnect connectors={connectors}>
+  //     {Home()}
+  //   </Provider>
+  // );
   return (
     <Provider autoConnect connectors={connectors}>
       <BrowserRouter>

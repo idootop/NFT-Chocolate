@@ -1,1 +1,2 @@
-export * from './connectors'
+export * from "./address";
+export * from "./connectors";
