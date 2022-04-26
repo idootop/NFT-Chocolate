@@ -4,11 +4,13 @@ export const LButton = (p: {
   bg?: string;
   color?: string;
   onClick?: () => any;
+  disabled?: boolean;
   children: string;
 }) => {
-  const { bg = "balck", color = "white" } = p;
+  const { disabled = false, bg = "balck", color = "white" } = p;
   return (
     <Button
+      disabled={disabled}
       height="40px"
       padding="0 20px"
       borderRadius="1rem"

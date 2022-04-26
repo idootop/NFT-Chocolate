@@ -1,5 +1,5 @@
-import { LButton } from "@/components";
-import { Box, Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react";
+import { ConnectButton } from "@/components";
+import { Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 function Home() {
@@ -23,9 +23,7 @@ function Home() {
         About
       </Tab>
       <Spacer />
-      <LButton color="#fff" bg="#3478f6">
-        Connect Wallet
-      </LButton>
+      <ConnectButton />
     </HStack>
   );
   const body =
@@ -46,7 +44,7 @@ function AllNFT() {
   return (
     <Center h="100%">
       <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        All NFT {process.env.INFURA_API_KEY} 123
+        All NFT
       </Text>
     </Center>
   );
