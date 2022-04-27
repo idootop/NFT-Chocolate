@@ -1,2 +1,3 @@
 export * from "./address";
-export * from "./connectors";
+export * from "./client";
+export * from "./config";

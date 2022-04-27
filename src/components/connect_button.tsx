@@ -11,18 +11,44 @@ import {
   MenuItem,
   MenuList,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
-import { useAccount, useConnect } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useDisconnect,
+  useEnsName
+} from "wagmi";
 
 export function ConnectButton() {
   const toast = useToast();
-  const [{ data }, connect] = useConnect();
-  const [{ data: accountData }, disconnect] = useAccount({
-    fetchEns: true,
+  const { data: account } = useAccount();
+  const { data: ensName } = useEnsName();
+  const { disconnect } = useDisconnect();
+  const { connectors, connect } = useConnect({
+    onError(error) {
+      toast({
+        duration: 2000,
+        position: "top",
+        render: () => (
+          <Center
+            m="16px 0"
+            bg="#FF3737"
+            p="6px 17px"
+            borderRadius="100px"
+            fontWeight="500"
+            fontSize="14px"
+            color="#282828"
+            boxShadow="0px 3px 5px rgba(0,0,0,0.04)"
+          >
+            {error?.message ?? "Failed to connect"}
+          </Center>
+        ),
+      });
+    },
   });
 
-  if (accountData) {
+  if (account) {
     return (
       <Menu>
         <MenuButton
@@ -45,11 +71,11 @@ export function ConnectButton() {
             <Image
               w="24px"
               borderRadius="50%"
-              src={"https://stamp.fyi/avatar/" + accountData.address}
-              alt={accountData.address}
+              src={"https://stamp.fyi/avatar/" + account.address}
+              alt={account.address}
             />
             <Text maxWidth="120px" overflow="clip">
-              {shortenAddress(accountData.ens?.name ?? accountData.address)}
+              {shortenAddress(ensName ?? account.address)}
             </Text>
           </HStack>
         </MenuButton>
@@ -76,7 +102,7 @@ export function ConnectButton() {
             _focus={{
               bg: "transparent",
             }}
-            onClick={disconnect}
+            onClick={() => disconnect()}
           >
             Disconnect
           </MenuItem>
@@ -114,7 +140,7 @@ export function ConnectButton() {
         bg="#fff"
         overflow="hidden"
       >
-        {data.connectors.map((connector) =>
+        {connectors.map((connector) =>
           connector.ready ? (
             <MenuItem
               padding="3px 16px"
@@ -132,30 +158,7 @@ export function ConnectButton() {
               }}
               disabled={!connector.ready}
               key={connector.id}
-              onClick={() =>
-                connect(connector).then(({ error }) => {
-                  if (error) {
-                    toast({
-                      duration: 2000,
-                      position: "top",
-                      render: () => (
-                        <Center
-                          m="16px 0"
-                          bg="#FF3737"
-                          p="6px 17px"
-                          borderRadius="100px"
-                          fontWeight="500"
-                          fontSize="14px"
-                          color="#282828"
-                          boxShadow="0px 3px 5px rgba(0,0,0,0.04)"
-                        >
-                          {error?.message ?? "Failed to connect"}
-                        </Center>
-                      ),
-                    });
-                  }
-                })
-              }
+              onClick={() => connect(connector)}
             >
               <Image
                 src={

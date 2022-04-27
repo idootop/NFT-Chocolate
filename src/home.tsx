@@ -1,6 +1,9 @@
 import { ConnectButton, Tabs } from "@/components";
 import { Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
+import { useContractRead } from "wagmi";
+import iuABI from "./assets/IUChocolate.json";
+import { kContractAddress } from "./utils";
 
 function Home() {
   const [tab, setTab] = useState("IU Chocolate");
@@ -19,11 +22,13 @@ function Home() {
     </HStack>
   );
   const body =
-    tab === "IU Chocolate"
-      ? AllNFT()
-      : tab === "My Chocolate"
-      ? MyNFT()
-      : About();
+    tab === "IU Chocolate" ? (
+      <AllNFT />
+    ) : tab === "My Chocolate" ? (
+      <MyNFT />
+    ) : (
+      <About />
+    );
   return (
     <VStack w="100%" h="100%">
       {header}
@@ -33,10 +38,17 @@ function Home() {
 }
 
 function AllNFT() {
+  const contractRead = useContractRead(
+    {
+      addressOrName: kContractAddress,
+      contractInterface: iuABI,
+    },
+    "totalSupply"
+  );
   return (
     <Center h="100%">
       <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        All NFT
+        All NFT {contractRead.data?.toString()} 123
       </Text>
     </Center>
   );
