@@ -1,4 +1,4 @@
-import { ConnectButton } from "@/components";
+import { ConnectButton, Tabs } from "@/components";
 import { Center, HStack, Spacer, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
@@ -13,15 +13,7 @@ function Home() {
       justify="center"
       align="center"
     >
-      <Tab active={tab} setTab={setTab}>
-        IU Chocolate
-      </Tab>
-      <Tab active={tab} setTab={setTab}>
-        My Chocolate
-      </Tab>
-      <Tab active={tab} setTab={setTab}>
-        About
-      </Tab>
+      <Tabs tab={tab} setTab={setTab} />
       <Spacer />
       <ConnectButton />
     </HStack>
@@ -52,9 +44,9 @@ function AllNFT() {
 
 function MyNFT() {
   return (
-    <Center>
+    <Center h="100%">
       <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        MyNFT
+        My NFT
       </Text>
     </Center>
   );
@@ -62,32 +54,11 @@ function MyNFT() {
 
 function About() {
   return (
-    <Center>
+    <Center h="100%">
       <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
         About
       </Text>
     </Center>
-  );
-}
-
-function Tab(p: {
-  active: string;
-  setTab: (tab: string) => void;
-  children: string;
-}) {
-  return (
-    <Text
-      p="0 15px 0 0"
-      cursor="pointer"
-      fontSize="16px"
-      fontWeight="bold"
-      color={p.active === p.children ? "black" : "#6e6d78"}
-      onClick={() => {
-        p.setTab(p.children);
-      }}
-    >
-      {p.children}
-    </Text>
   );
 }
 

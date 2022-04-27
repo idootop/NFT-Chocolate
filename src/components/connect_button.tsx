@@ -41,22 +41,7 @@ export function ConnectButton() {
             shadow: "0 0 0 4px #3478f6",
           }}
         >
-          <HStack
-            height="40px"
-            padding="0"
-            borderRadius="1rem"
-            fontSize="16px"
-            fontWeight="bold"
-            color="#fff"
-            bg="#3478f6"
-            border="0"
-            cursor="pointer"
-            transitionDuration=".15s"
-            transitionTimingFunction="ease-in-out"
-            _hover={{
-              shadow: "0 0 0 4px #3478f6",
-            }}
-          >
+          <HStack>
             <Image
               w="24px"
               borderRadius="50%"
@@ -87,6 +72,9 @@ export function ConnectButton() {
             bg="transparent"
             _hover={{
               bg: "#e8e6e9",
+            }}
+            _focus={{
+              bg: "transparent",
             }}
             onClick={disconnect}
           >
@@ -138,6 +126,9 @@ export function ConnectButton() {
               bg="transparent"
               _hover={{
                 bg: "#e8e6e9",
+              }}
+              _focus={{
+                bg: "transparent",
               }}
               disabled={!connector.ready}
               key={connector.id}

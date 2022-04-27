@@ -35,7 +35,7 @@ export const ZStack: ChakraComponent<"div", {}> = (p) => {
   ) as any;
 };
 
-export function generateStackPosition(p?: Partial<PositionProps>) {
+function generateStackPosition(p?: Partial<PositionProps>) {
   switch (p?.align) {
     case "topLeft":
       return {
