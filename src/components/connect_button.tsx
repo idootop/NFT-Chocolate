@@ -1,50 +1,28 @@
 import coinbase from "@/assets/coinbase.svg";
 import metamask from "@/assets/metamask.svg";
 import walletconnect from "@/assets/walletconnect.svg";
+import { useErrorToast } from "@/hooks";
 import { shortenAddress } from "@/utils";
+import { ensAvatar } from "@/utils/assets_url";
 import {
-  Center,
   HStack,
   Image,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
-  useToast
+  Text
 } from "@chakra-ui/react";
-import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useEnsName
-} from "wagmi";
+import { useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
 
 export function ConnectButton() {
-  const toast = useToast();
+  const toast = useErrorToast();
   const { data: account } = useAccount();
   const { data: ensName } = useEnsName();
   const { disconnect } = useDisconnect();
   const { connectors, connect } = useConnect({
     onError(error) {
-      toast({
-        duration: 2000,
-        position: "top",
-        render: () => (
-          <Center
-            m="16px 0"
-            bg="#FF3737"
-            p="6px 17px"
-            borderRadius="100px"
-            fontWeight="500"
-            fontSize="14px"
-            color="#282828"
-            boxShadow="0px 3px 5px rgba(0,0,0,0.04)"
-          >
-            {error?.message ?? "Failed to connect"}
-          </Center>
-        ),
-      });
+      toast(error?.message ?? "Failed to connect");
     },
   });
 
@@ -71,7 +49,7 @@ export function ConnectButton() {
             <Image
               w="24px"
               borderRadius="50%"
-              src={"https://stamp.fyi/avatar/" + account.address}
+              src={ensAvatar(account.address ?? "")}
               alt={account.address}
             />
             <Text maxWidth="120px" overflow="clip">
