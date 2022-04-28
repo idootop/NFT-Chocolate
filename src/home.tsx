@@ -1,4 +1,6 @@
-import { ConnectButton, Tabs, ZStack, Position } from "@/components";
+import ethLogo from "@/assets/eth.svg";
+import polygonLogo from "@/assets/polygon.svg";
+import { ConnectButton, Position, Tabs, ZStack } from "@/components";
 import {
   AspectRatio,
   Box,
@@ -7,7 +9,6 @@ import {
   HStack,
   Image,
   Link,
-  LinkBox,
   LinkOverlay,
   SimpleGrid,
   Spacer,
@@ -16,6 +17,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAccount } from "wagmi";
 import {
   useBalanceOf,
@@ -25,10 +27,11 @@ import {
   useTokenURI,
   useTotalSupply,
 } from "./hooks";
-import { kZeroAddress, range, shortenAddress } from "./utils";
+import { clamp, kZeroAddress, range, shortenAddress } from "./utils";
 import { ensAvatar, nftSrc, openseaURL } from "./utils/assets_url";
 
 function Home() {
+  const nft = useSearchParams()[0].get("nft");
   const [tab, setTab] = useState("IU Chocolate");
   const header = (
     <HStack
@@ -65,17 +68,18 @@ function Home() {
 }
 
 function AllNFT() {
-  const isLoading = false,
-    totalSupply = 10;
-  // const { data: totalSupply, isLoading } = useTotalSupply();
+  const { data: totalSupply, isLoading } = useTotalSupply();
   return isLoading ? (
     <CenterSpinner />
   ) : totalSupply ? (
     <NFTGrid>
-      {range(totalSupply as any).map((idx) => (
-        <Center>
-          <NFT key={idx} tokenID={idx} />
+      {range(clamp(totalSupply as any, 0, 10)).map((idx) => (
+        <Center key={idx}>
+          <NFT tokenID={(totalSupply as any) - idx - 1} />
         </Center>
+      ))}
+      {range(clamp(5 - (totalSupply as any), 0, 5)).map((idx) => (
+        <div key={idx} />
       ))}
     </NFTGrid>
   ) : (
@@ -84,49 +88,83 @@ function AllNFT() {
 }
 
 function MyNFT() {
-  const isLoading = false,
-    balance = 10;
-  // const { data: account } = useAccount();
-  // const { data: balance, isLoading } = useBalanceOf(
-  //   account?.address ?? kZeroAddress
-  // );
+  const { data: account } = useAccount();
+  const { data: balance, isLoading } = useBalanceOf(
+    account?.address ?? kZeroAddress.replace("0x0", "0x1")
+  );
   return isLoading ? (
     <CenterSpinner />
-  ) : balance ? (
+  ) : account?.address && balance ? (
     <NFTGrid>
       {range(balance as any).map((idx) => (
-        <Center>
-          <OwnedNFT key={idx} index={idx} />
+        <Center key={idx}>
+          <OwnedNFT index={idx} />
         </Center>
+      ))}
+      {range(clamp(5 - (balance as any), 0, 5)).map((idx) => (
+        <div key={idx} />
       ))}
     </NFTGrid>
   ) : (
-    <CenterNothing />
+    <CenterNothing isMine />
   );
 }
 
 function About() {
   return (
-    <Center>
-      <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        About
-      </Text>
+    <Center h="calc(100vh - 100px)" p="32px" textAlign="center">
+      <VStack h="100%" justify="space-evenly">
+        <Image src={ethLogo} h="160px" />
+        <Text p="16px" fontSize="16px" fontWeight="bold">
+          You can mint one{" "}
+          {
+            <Link href="/home?nft=iu" color="#3173e0">
+              IU Chocolate
+            </Link>
+          }{" "}
+          for FREE or{" "}
+          {
+            <Link href="/home?nft=rich" color="#7b4add">
+              1 RICH for 1 MATIC
+            </Link>
+          }
+          .
+        </Text>
+        <Image src={polygonLogo} w="120px" />
+        <Text p="16px" fontSize="16px" fontWeight="bold">
+          Once you have an{" "}
+          {
+            <Link href="/home?nft=iu" color="#3173e0">
+              IU
+            </Link>
+          }{" "}
+          or{" "}
+          {
+            <Link href="/home?nft=rich" color="#7b4add">
+              RICH
+            </Link>
+          }
+          , you can update their metadata at any time for free.
+        </Text>
+        <Text p="16px" fontSize="12px" color="#8c939a">
+          *You only need to pay the GAS fee.
+        </Text>
+      </VStack>
     </Center>
   );
 }
 
 function NFT(p: { tokenID: number; isMine?: boolean }) {
-  const isLoading = false,
-    nft = {
-      name: "IU Chocolate #2",
-      image:
-        "https://ipfs.infura.io/ipfs/QmXVd7tMEa3oNQsrRncTDQe1V9JftAmuHqtFxUeqH7rukc",
-    };
-  // const { uri, isLoading } = useTokenURI(p.tokenID);
-  const { data: account } = useAccount();
-  // if (!uri) return <div />;
-  // const nft = JSON.parse(uri);
   const toast = useErrorToast();
+  const { uri, isLoading } = useTokenURI(p.tokenID);
+  if (!uri) return <div />;
+  const nft = JSON.parse(uri);
+  const account = !p.isMine
+    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+      useOwnerOf(p.tokenID)
+    : // eslint-disable-next-line react-hooks/rules-of-hooks
+      useAccount().data?.address;
+
   const edit = () => {
     // todo
     if (p.isMine) toast(p.tokenID.toString());
@@ -162,9 +200,15 @@ function NFT(p: { tokenID: number; isMine?: boolean }) {
               borderRadius="16px"
               overflow="hidden"
             >
-              <Center>
-                <ZStack>
-                  <Image src={nftSrc(nft.image)} alt={nft.name} fit="cover" />
+              <Center w="100%" h="100%">
+                <ZStack w="100%" h="100%">
+                  <Image
+                    w="100%"
+                    h="100%"
+                    src={nftSrc(nft.image)}
+                    alt={nft.name}
+                    fit="cover"
+                  />
                   <Position w="100%" h="100%" align="center">
                     <Center
                       onClick={edit}
@@ -197,11 +241,11 @@ function NFT(p: { tokenID: number; isMine?: boolean }) {
                 <Image
                   w="24px"
                   borderRadius="50%"
-                  src={ensAvatar(account?.address ?? "")}
-                  alt={account?.address}
+                  src={ensAvatar(account ?? "")}
+                  alt={account}
                 />
                 <Text maxWidth="120px" overflow="clip" fontSize="14px">
-                  {shortenAddress(account?.address ?? "")}
+                  {shortenAddress(account ?? "")}
                 </Text>
               </HStack>
             </VStack>
@@ -213,21 +257,9 @@ function NFT(p: { tokenID: number; isMine?: boolean }) {
 }
 
 function OwnedNFT(p: { index: number }) {
-  const isLoading = false,
-    tokenID = 0;
-  // const { data: account } = useAccount();
-  // const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
-  return isLoading ? (
-    <Spinner
-      thickness="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="blue.500"
-      size="xl"
-    />
-  ) : (
-    <NFT tokenID={tokenID} isMine />
-  );
+  const { data: account } = useAccount();
+  const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
+  return <NFT tokenID={tokenID} isMine />;
 }
 
 function NFTGrid(p: { children: any }) {
@@ -252,12 +284,20 @@ function CenterSpinner() {
   );
 }
 
-function CenterNothing() {
+function CenterNothing(p: { isMine?: boolean }) {
   return (
     <Center h="calc(100vh - 100px)">
-      <Text p="0 15px 0 0" cursor="pointer" fontSize="16px" fontWeight="bold">
-        Nothing...
-      </Text>
+      {p.isMine ? (
+        <VStack>
+          <Text p="0 15px 0 0" fontSize="16px" fontWeight="bold">
+            You don't have an IU Chocolate yet.
+          </Text>
+        </VStack>
+      ) : (
+        <Text p="0 15px 0 0" fontSize="16px" fontWeight="bold">
+          Nothing...
+        </Text>
+      )}
     </Center>
   );
 }

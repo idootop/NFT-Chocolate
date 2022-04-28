@@ -7,7 +7,7 @@ const noWatch = {
   watch: false,
 };
 
-export function useLast9NFT() {
+export function useLast10NFT() {
   const { data: totalSupply } = useTotalSupply();
   const tokenURI = (tokenID: number) =>
     readContract(kContractConfig, "tokenURI", {
@@ -16,8 +16,8 @@ export function useLast9NFT() {
 
   const query = () =>
     Promise.all(
-      range(clamp(totalSupply as any, 0, 9), (_, index) =>
-        tokenURI((totalSupply as any) - index)
+      range(clamp(totalSupply as any, 0, 9), (index) =>
+        tokenURI((totalSupply as any) - index - 1)
       )
     );
   return useAsync(query);

@@ -10,12 +10,10 @@ import Welcome from "./welcome";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={Welcome()} />
-        <Route path="/home" element={Home()} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={Welcome()} />
+      <Route path="/home" element={Home()} />
+    </Routes>
   );
 }
 
@@ -25,7 +23,9 @@ root.render(
   <React.StrictMode>
     <Provider client={client}>
       <ChakraProvider>
-        <App />
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </ChakraProvider>
     </Provider>
   </React.StrictMode>
