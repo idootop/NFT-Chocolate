@@ -38,6 +38,8 @@ function Home() {
       bg="#fff"
       justify="center"
       align="center"
+      position="fixed"
+      zIndex={2}
     >
       <Tabs tab={tab} setTab={setTab} />
       <Spacer />
@@ -55,7 +57,9 @@ function Home() {
   return (
     <VStack w="100%" h="100%" bg="#f8f9fd">
       {header}
-      {body}
+      <Box p="80px 0 0 0" w="100%">
+        {body}
+      </Box>
     </VStack>
   );
 }
