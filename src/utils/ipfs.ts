@@ -1,5 +1,6 @@
 import { create } from "ipfs-http-client";
 import { nftSrc } from "./assets_url";
+import { isEmpty } from "./empty";
 
 const client = create({
   url: "https://ipfs.infura.io:5001/api/v0",
@@ -8,6 +9,7 @@ const client = create({
 export async function ipfsUpload(file: any) {
   try {
     const added = await client.add(file);
-    return nftSrc('ipfs://'+added.path);
+    const src = nftSrc("ipfs://" + added.path);
+    return isEmpty(src) ? undefined : src;
   } catch (error) {}
 }

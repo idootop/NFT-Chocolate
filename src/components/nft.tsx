@@ -1,3 +1,4 @@
+import ethLogo from "@/assets/eth.svg";
 import { Position, ZStack } from "@/components";
 import {
   useErrorToast,
@@ -5,8 +6,10 @@ import {
   useNFT,
   useNFTName,
   useOwnerOf,
+  useSuccessToast,
   useTokenOfOwnerByIndex,
   useTokenURI,
+  useUpdate,
 } from "@/hooks";
 import {
   ensAvatar,
@@ -53,14 +56,16 @@ export function OwnedNFT(p: { index: number }) {
 
 export function NFT(p: { tokenID: number; isMine?: boolean }) {
   const { uri, isLoading } = useTokenURI(p.tokenID);
-  if (!uri) return <div />;
-  const nft = JSON.parse(uri);
+  const nft = JSON.parse(uri ?? "{}");
+  nft.tokenID = p.tokenID;
   const account = !p.isMine
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useOwnerOf(p.tokenID)
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useAccount().data?.address;
-  return (
+  return !uri ? (
+    <div />
+  ) : (
     <AspectRatio
       ratio={3 / 4}
       w="100%"
@@ -93,13 +98,23 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
             >
               <Center w="100%" h="100%">
                 <ZStack w="100%" h="100%">
-                  <Image
+                  <Center
                     w="100%"
                     h="100%"
-                    src={nftSrc(nft.image)}
-                    alt={nft.name}
-                    fit="cover"
-                  />
+                    bgImage={ethLogo}
+                    bgRepeat="no-repeat"
+                    bgPosition="center"
+                    bgSize="50%"
+                    color="transparent"
+                  >
+                    <Image
+                      w="100%"
+                      h="100%"
+                      src={nftSrc(nft.image)}
+                      alt={nft.name}
+                      fit="cover"
+                    />
+                  </Center>
                   <Position w="100%" h="100%" align="center">
                     <EditMask nft={nft} isMine={p.isMine ?? false} />
                   </Position>
@@ -130,11 +145,12 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
 }
 
 function EditMask(p: {
-  nft: { name: string; desp: string; image: string };
+  nft: { tokenID: string; name: string; desp: string; image: string };
   isMine: boolean;
 }) {
   const isPC = useIsPC();
   const toast = useErrorToast();
+  const success = useSuccessToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const nftName = useNFTName();
@@ -144,7 +160,9 @@ function EditMask(p: {
     name: "",
     desp: "",
     image: undefined,
+    tokenID: p.nft.tokenID,
   });
+  const writeUpdate = useUpdate(nft);
   const setImg = (s: any) => setNFT({ ...nft, image: s });
   const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
@@ -185,7 +203,15 @@ function EditMask(p: {
       return;
     }
     nft.image = uri as any;
-    // todo write contract
+    const result = (await writeUpdate().catch((e) => ({ error: e }))) as any;
+    if (result?.error) {
+      toast(result.error.toString());
+      endUpload();
+      return;
+    }
+    success(
+      "Update successful! The page will be reload after 10s to see the results."
+    );
     endUpload();
     onClose();
   };
@@ -245,7 +271,7 @@ function EditMask(p: {
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
                 withIcon={!nft.image}
-                withPreview={nft.image}
+                withPreview={nft.image ? true : false}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}

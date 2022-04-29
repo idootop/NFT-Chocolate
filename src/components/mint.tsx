@@ -1,9 +1,11 @@
 import {
   useErrorToast,
   useIsPC,
+  useMint,
   useNFT,
   useNFTColor,
   useNFTName,
+  useSuccessToast,
 } from "@/hooks";
 import { ipfsUpload, isEmpty } from "@/utils";
 import { AddIcon } from "@chakra-ui/icons";
@@ -32,20 +34,27 @@ import { useAccount } from "wagmi";
 export function Mint() {
   const isPC = useIsPC();
   const toast = useErrorToast();
+  const success = useSuccessToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: account } = useAccount();
+
   const nftColor = useNFTColor();
   const nftName = useNFTName();
   const isRICH = useNFT() === "rich";
   const [nft, setNFT] = useState({
-    to: "",
+    to: account?.address,
     name: "",
     desp: "",
     image: undefined,
   });
+  const writeMint = useMint(nft);
   const setImg = (s: any) => setNFT({ ...nft, image: s });
-  const setTo = (event: any) => setNFT({ ...nft, to: event.target.value });
+  const setTo = (event: any) =>
+    setNFT({
+      ...nft,
+      to: isEmpty(event.target.value) ? account?.address : event.target.value,
+    });
   const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
 
@@ -69,7 +78,7 @@ export function Mint() {
       toast("Please set your NFT's owner address first!");
       return;
     }
-    if (isEmpty(nft.name)) {
+    if (isRICH && isEmpty(nft.name)) {
       toast("Please set your NFT's name first!");
       return;
     }
@@ -89,7 +98,13 @@ export function Mint() {
       return;
     }
     nft.image = uri as any;
-    // todo write contract
+    const result = (await writeMint().catch((e) => ({ error: e }))) as any;
+    if (result?.error) {
+      toast(result.error.toString());
+      endUpload();
+      return;
+    }
+    success("Mint successful! The page will be reload after 10s to see the results.");
     endUpload();
     onClose();
   };
@@ -128,7 +143,7 @@ export function Mint() {
               <FormLabel>Address</FormLabel>
               <Input
                 placeholder="Mint to whom?"
-                value={nft.to === "" ? account?.address : nft.to}
+                value={nft.to}
                 onChange={setTo}
               />
             </FormControl>
@@ -154,7 +169,7 @@ export function Mint() {
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
                 withIcon={!nft.image}
-                withPreview={nft.image}
+                withPreview={nft.image ? true : false}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}
