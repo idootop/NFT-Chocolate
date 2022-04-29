@@ -2,17 +2,23 @@ import {
   clamp,
   decodeTokenURI,
   kIUContractConfig,
+  kOneETH,
   kRICHContractConfig,
-  range
+  range,
 } from "@/utils";
 import { readContract, writeContract } from "@wagmi/core";
-import { useContractRead } from "wagmi";
+import { useContractEvent, useContractRead } from "wagmi";
+import { useErrorToast } from ".";
 import { useAsync } from "./useAsync";
 import { useNFT } from "./useNFT";
 
 const noWatch = {
   watch: false,
 };
+
+export function useEventListener(event: string, listener: (e: any) => any) {
+  return useContractEvent(useContractConfig(), event, listener);
+}
 
 export function useContractConfig() {
   const isRICH = useNFT() === "rich";
@@ -22,24 +28,49 @@ export function useContractConfig() {
 export function useMint(nft: any) {
   const isRICH = useNFT() === "rich";
   const config = useContractConfig();
+  const toast = useErrorToast();
   return () =>
     writeContract(config, "mint", {
       args: !isRICH
         ? [nft.to, nft.desp, nft.image]
         : [nft.to, nft.name, nft.desp, nft.image],
+      overrides: {
+        value: isRICH ? kOneETH : 0,
+      },
       ...noWatch,
+    }).catch((e: any) => {
+      if (e) {
+        toast(
+          e?.data?.message?.includes("revert")
+            ? isRICH
+              ? "At least 1 MATIC needs to be paid to mint 1 RICH."
+              : "Each person can only have 1 IU Chocolate."
+            : e.toString()
+        );
+      }
+      return 404;
     });
 }
 
 export function useUpdate(nft: any) {
   const isRICH = useNFT() === "rich";
   const config = useContractConfig();
+  const toast = useErrorToast();
   return () =>
     writeContract(config, "update", {
       args: !isRICH
         ? [nft.tokenID, nft.desp, nft.image]
         : [nft.tokenID, nft.name, nft.desp, nft.image],
       ...noWatch,
+    }).catch((e: any) => {
+      if (e) {
+        toast(
+          e?.data?.message?.includes("revert")
+            ? "You're not the owner."
+            : e.toString()
+        );
+      }
+      return 404;
     });
 }
 

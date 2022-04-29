@@ -1,47 +1,47 @@
 import ethLogo from "@/assets/eth.svg";
 import { Position, ZStack } from "@/components";
 import {
-  useErrorToast,
-  useIsPC,
-  useNFT,
-  useNFTName,
-  useOwnerOf,
-  useSuccessToast,
-  useTokenOfOwnerByIndex,
-  useTokenURI,
-  useUpdate,
+    useErrorToast,
+    useIsPC,
+    useNFT,
+    useNFTName,
+    useOwnerOf,
+    useSuccessToast,
+    useTokenOfOwnerByIndex,
+    useTokenURI,
+    useUpdate
 } from "@/hooks";
 import {
-  ensAvatar,
-  ipfsUpload,
-  isEmpty,
-  nftSrc,
-  openseaURL,
-  shortenAddress,
+    ensAvatar,
+    ipfsUpload,
+    isEmpty,
+    nftSrc,
+    openseaURL,
+    shortenAddress
 } from "@/utils";
 import {
-  AspectRatio,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  HStack,
-  Image,
-  Input,
-  LinkOverlay,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spinner,
-  Text,
-  useBoolean,
-  useDisclosure,
-  VStack,
+    AspectRatio,
+    Button,
+    Center,
+    Flex,
+    FormControl,
+    FormLabel,
+    HStack,
+    Image,
+    Input,
+    LinkOverlay,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spinner,
+    Text,
+    useBoolean,
+    useDisclosure,
+    VStack
 } from "@chakra-ui/react";
 import { nextTick } from "process";
 import { useState } from "react";
@@ -203,9 +203,8 @@ function EditMask(p: {
       return;
     }
     nft.image = uri as any;
-    const result = (await writeUpdate().catch((e) => ({ error: e }))) as any;
-    if (result?.error) {
-      toast(result.error.toString());
+    const result = (await writeUpdate()) as any;
+    if (result === 404) {
       endUpload();
       return;
     }

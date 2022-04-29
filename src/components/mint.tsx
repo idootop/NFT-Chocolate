@@ -1,30 +1,29 @@
 import {
-  useErrorToast,
-  useIsPC,
-  useMint,
-  useNFT,
-  useNFTColor,
-  useNFTName,
-  useSuccessToast,
+    useErrorToast, useIsPC,
+    useMint,
+    useNFT,
+    useNFTColor,
+    useNFTName,
+    useSuccessToast
 } from "@/hooks";
 import { ipfsUpload, isEmpty } from "@/utils";
 import { AddIcon } from "@chakra-ui/icons";
 import {
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spinner,
-  useBoolean,
-  useDisclosure,
+    Box,
+    Button,
+    FormControl,
+    FormLabel,
+    Input,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spinner,
+    useBoolean,
+    useDisclosure
 } from "@chakra-ui/react";
 import { nextTick } from "process";
 import { useState } from "react";
@@ -38,7 +37,6 @@ export function Mint() {
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: account } = useAccount();
-
   const nftColor = useNFTColor();
   const nftName = useNFTName();
   const isRICH = useNFT() === "rich";
@@ -66,7 +64,7 @@ export function Mint() {
     });
   };
 
-  const mint = () => {
+  const mint = (e: any) => {
     if (!account?.address) {
       toast("Please connect wallet first.");
       return;
@@ -98,13 +96,14 @@ export function Mint() {
       return;
     }
     nft.image = uri as any;
-    const result = (await writeMint().catch((e) => ({ error: e }))) as any;
-    if (result?.error) {
-      toast(result.error.toString());
+    const result = (await writeMint()) as any;
+    if (result === 404) {
       endUpload();
       return;
     }
-    success("Mint successful! The page will be reload after 10s to see the results.");
+    success(
+      "Mint successful! The page will be reload after 10s to see the results."
+    );
     endUpload();
     onClose();
   };
@@ -123,6 +122,7 @@ export function Mint() {
         _hover={{
           boxShadow: "0px 10px 68px rgba(0,0,0,0.66)",
         }}
+        zIndex={3}
         onClick={mint}
       >
         <AddIcon w={6} h={6} color="white" />

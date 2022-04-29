@@ -6,7 +6,7 @@ export function useErrorToast() {
   const toast = useToast();
   return (text: string) =>
     toast({
-      duration: 2000,
+      duration: 5000,
       position: "top",
       render: () => (
         <Center
