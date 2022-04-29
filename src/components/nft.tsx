@@ -1,47 +1,51 @@
 import { Position, ZStack } from "@/components";
 import {
-    useErrorToast,
-    useOwnerOf,
-    useTokenOfOwnerByIndex,
-    useTokenURI
+  useErrorToast,
+  useOwnerOf,
+  useTokenOfOwnerByIndex,
+  useTokenURI,
 } from "@/hooks";
-import { ensAvatar, nftSrc, openseaURL, shortenAddress } from "@/utils";
 import {
-    AspectRatio,
-    Button,
-    Center,
-    Flex,
-    FormControl,
-    FormLabel,
-    HStack,
-    Image,
-    Input,
-    LinkOverlay,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Spinner,
-    Text,
-    useDisclosure,
-    VStack
+  ensAvatar,
+  ipfsUpload,
+  nftSrc,
+  openseaURL,
+  shortenAddress,
+} from "@/utils";
+import {
+  AspectRatio,
+  Button,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Image,
+  Input,
+  LinkOverlay,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  Text,
+  useBoolean,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useAccount } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
-    const { data: account } = useAccount();
-    const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
-    return <NFT tokenID={tokenID} isMine />;
-  }
+  const { data: account } = useAccount();
+  const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
+  return <NFT tokenID={tokenID} isMine />;
+}
 
 export function NFT(p: { tokenID: number; isMine?: boolean }) {
-  const toast = useErrorToast();
-  const initialRef = useRef<any>();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { uri, isLoading } = useTokenURI(p.tokenID);
   if (!uri) return <div />;
   const nft = JSON.parse(uri);
@@ -50,16 +54,6 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
       useOwnerOf(p.tokenID)
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useAccount().data?.address;
-
-  const edit = () => {
-    if (p.isMine) onOpen();
-  };
-  const submit = () => {
-    // todo
-    if (p.isMine) {
-      onClose();
-    }
-  };
   return (
     <AspectRatio
       ratio={3 / 4}
@@ -101,55 +95,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
                     fit="cover"
                   />
                   <Position w="100%" h="100%" align="center">
-                    <>
-                      <Center
-                        onClick={edit}
-                        w="100%"
-                        h="100%"
-                        bg="transparent"
-                        color="transparent"
-                        fontSize="16px"
-                        fontWeight="bold"
-                        _hover={
-                          p.isMine
-                            ? {
-                                bg: "rgba(0,0,0,0.2)",
-                                color: "white",
-                              }
-                            : {}
-                        }
-                      >
-                        Edit
-                      </Center>
-                      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-                        <ModalOverlay />
-                        <ModalContent>
-                          <ModalHeader>Create your account</ModalHeader>
-                          <ModalCloseButton />
-                          <ModalBody pb={6}>
-                            <FormControl>
-                              <FormLabel>First name</FormLabel>
-                              <Input
-                                ref={initialRef}
-                                placeholder="First name"
-                              />
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                              <FormLabel>Last name</FormLabel>
-                              <Input placeholder="Last name" />
-                            </FormControl>
-                          </ModalBody>
-
-                          <ModalFooter>
-                            <Button colorScheme="blue" mr={3}>
-                              Save
-                            </Button>
-                            <Button onClick={submit}>Cancel</Button>
-                          </ModalFooter>
-                        </ModalContent>
-                      </Modal>
-                    </>
+                    <EditMask nft={nft} isMine={p.isMine ?? false} />
                   </Position>
                 </ZStack>
               </Center>
@@ -174,5 +120,88 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
         </LinkOverlay>
       )}
     </AspectRatio>
+  );
+}
+
+function EditMask(p: {
+  nft: { name: string; desp: string; image: string };
+  isMine: boolean;
+}) {
+  const toast = useErrorToast();
+  const initialRef = useRef<any>();
+  const img = useRef();
+  const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  async function onChange(e: any) {
+    img.current = e.target.files[0];
+  }
+  const edit = () => {
+    if (p.isMine) onOpen();
+  };
+  const submit = async () => {
+    if (!p.isMine) return;
+    if (!img.current) {
+      toast("Please set your NFT image first!");
+      return;
+    }
+    startUpload();
+    const uri = await ipfsUpload(img.current);
+    if (!uri) {
+      toast(uri ?? "Upload Image to IPFS failure!");
+      endUpload();
+      return;
+    }
+    // todo write contract
+    endUpload();
+    onClose();
+  };
+  return (
+    <>
+      <Center
+        onClick={edit}
+        w="100%"
+        h="100%"
+        bg="transparent"
+        color="transparent"
+        fontSize="16px"
+        fontWeight="bold"
+        _hover={
+          p.isMine
+            ? {
+                bg: "rgba(0,0,0,0.2)",
+                color: "white",
+              }
+            : {}
+        }
+      >
+        Edit
+      </Center>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update Metadata</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <FormControl>
+              <FormLabel>Description</FormLabel>
+              <Input ref={initialRef} placeholder="What's it?" />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>NFT Image</FormLabel>
+              <Input type="file" onChange={onChange} />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={submit}>
+              Update
+              {uploading && <Spinner m="0 0 0 10px" size="sm" />}
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
