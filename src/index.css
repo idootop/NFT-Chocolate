@@ -28,3 +28,17 @@ div:focus {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-user-modify: read-write-plaintext-only;
 }
+
+.fileContainer {
+  box-shadow: none;
+}
+
+.uploadPictureContainer {
+  width: 90% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.fileContainer .deleteImage {
+  font-size: 18px;
+}

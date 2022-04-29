@@ -102,7 +102,7 @@ function TabItem(p: { setTab: (tab: string) => void; children: string }) {
     <MenuItem
       padding="0 16px"
       fontSize="16px"
-      lineHeight="52px"
+      lineHeight="48px"
       fontWeight="bold"
       color="#FF3737"
       border="0 transparent"

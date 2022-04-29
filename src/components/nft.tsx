@@ -1,42 +1,45 @@
 import { Position, ZStack } from "@/components";
 import {
-  useErrorToast,
-  useOwnerOf,
-  useTokenOfOwnerByIndex,
-  useTokenURI,
+    useErrorToast,
+    useIsPC,
+    useOwnerOf,
+    useTokenOfOwnerByIndex,
+    useTokenURI
 } from "@/hooks";
 import {
-  ensAvatar,
-  ipfsUpload,
-  nftSrc,
-  openseaURL,
-  shortenAddress,
+    ensAvatar,
+    ipfsUpload,
+    nftSrc,
+    openseaURL,
+    shortenAddress
 } from "@/utils";
 import {
-  AspectRatio,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  HStack,
-  Image,
-  Input,
-  LinkOverlay,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Spinner,
-  Text,
-  useBoolean,
-  useDisclosure,
-  VStack,
+    AspectRatio,
+    Button,
+    Center,
+    Flex,
+    FormControl,
+    FormLabel,
+    HStack,
+    Image,
+    Input,
+    LinkOverlay,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Spinner,
+    Text,
+    useBoolean,
+    useDisclosure,
+    VStack
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { nextTick } from "process";
+import { useRef, useState } from "react";
+import ImageUploader from "react-images-upload";
 import { useAccount } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
@@ -127,30 +130,41 @@ function EditMask(p: {
   nft: { name: string; desp: string; image: string };
   isMine: boolean;
 }) {
+  const isPC = useIsPC();
   const toast = useErrorToast();
   const initialRef = useRef<any>();
-  const img = useRef();
+  const [img, setImg] = useState();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  async function onChange(e: any) {
-    img.current = e.target.files[0];
-  }
+
+  const onDrop = (picture: any) => {
+    setImg(picture[0]);
+    nextTick(() => {
+      const icon = document.getElementsByClassName("deleteImage")[0];
+      if (icon) icon!.innerHTML = "✕";
+    });
+  };
+
   const edit = () => {
-    if (p.isMine) onOpen();
+    if (p.isMine) {
+      setImg(undefined);
+      onOpen();
+    }
   };
   const submit = async () => {
     if (!p.isMine) return;
-    if (!img.current) {
+    if (!img) {
       toast("Please set your NFT image first!");
       return;
     }
     startUpload();
-    const uri = await ipfsUpload(img.current);
+    const uri = await ipfsUpload(img);
     if (!uri) {
       toast(uri ?? "Upload Image to IPFS failure!");
       endUpload();
       return;
     }
+    toast(uri);
     // todo write contract
     endUpload();
     onClose();
@@ -176,7 +190,13 @@ function EditMask(p: {
       >
         Edit
       </Center>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        size={isPC ? "md" : "xs"}
+        scrollBehavior="inside"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Update Metadata</ModalHeader>
@@ -189,7 +209,20 @@ function EditMask(p: {
 
             <FormControl mt={4}>
               <FormLabel>NFT Image</FormLabel>
-              <Input type="file" onChange={onChange} />
+              <ImageUploader
+                withIcon={!img}
+                withPreview={img}
+                singleImage
+                withLabel={false}
+                onChange={onDrop}
+                buttonText="Choose Image"
+                buttonStyles={{
+                  display: img ? "none" : undefined,
+                }}
+                fileContainerStyle={{
+                  border: "1px dashed #cccccc",
+                }}
+              />
             </FormControl>
           </ModalBody>
 

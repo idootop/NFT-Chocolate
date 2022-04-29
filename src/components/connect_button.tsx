@@ -1,7 +1,7 @@
 import coinbase from "@/assets/coinbase.svg";
 import metamask from "@/assets/metamask.svg";
 import walletconnect from "@/assets/walletconnect.svg";
-import { useErrorToast } from "@/hooks";
+import { useErrorToast, useNFTColor } from "@/hooks";
 import { shortenAddress } from "@/utils";
 import { ensAvatar } from "@/utils/assets_url";
 import {
@@ -11,7 +11,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
 
@@ -20,6 +20,7 @@ export function ConnectButton() {
   const { data: account } = useAccount();
   const { data: ensName } = useEnsName();
   const { disconnect } = useDisconnect();
+  const nftColor = useNFTColor();
   const { connectors, connect } = useConnect({
     onError(error) {
       toast(error?.message ?? "Failed to connect");
@@ -36,13 +37,13 @@ export function ConnectButton() {
           fontSize="16px"
           fontWeight="bold"
           color="#fff"
-          bg="#3478f6"
+          bg={nftColor}
           border="0"
           cursor="pointer"
           transitionDuration=".15s"
           transitionTimingFunction="ease-in-out"
           _hover={{
-            shadow: "0 0 0 4px #3478f6",
+            shadow: "0 0 0 4px " + nftColor,
           }}
         >
           <HStack>
@@ -98,13 +99,13 @@ export function ConnectButton() {
         fontSize="16px"
         fontWeight="bold"
         color="#fff"
-        bg="#3478f6"
+        bg={nftColor}
         border="0"
         cursor="pointer"
         transitionDuration=".15s"
         transitionTimingFunction="ease-in-out"
         _hover={{
-          shadow: "0 0 0 4px #3478f6",
+          shadow: "0 0 0 4px " + nftColor,
         }}
       >
         Connect Wallet

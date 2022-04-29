@@ -26,6 +26,7 @@
     "ipfs-http-client": "^56.0.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-images-upload": "^1.2.8",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "stook": "^1.11.0",

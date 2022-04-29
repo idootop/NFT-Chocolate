@@ -1,11 +1,12 @@
 import ethLogo from "@/assets/eth.svg";
 import polygonLogo from "@/assets/polygon.svg";
-import { ConnectButton, NFT, OwnedNFT, Tabs } from "@/components";
+import { ConnectButton, NFT, OwnedNFT, Tabs, Mint } from "@/components";
 import {
   Box,
   Center,
   HStack,
   Image,
+  Kbd,
   Link,
   SimpleGrid,
   Spacer,
@@ -19,7 +20,7 @@ import { useBalanceOf, useTotalSupply } from "./hooks";
 import { clamp, kZeroAddress, range } from "./utils";
 
 function Home() {
-  const [tab, setTab] = useState("My");
+  const [tab, setTab] = useState("About");
   const header = (
     <HStack
       w="100%"
@@ -37,18 +38,21 @@ function Home() {
     </HStack>
   );
   return (
-    <VStack w="100%" h="100%" bg="#f8f9fd">
-      {header}
-      <Box w="100%" display={tab === "All" ? undefined : "none"}>
-        <AllNFT />
-      </Box>
-      <Box w="100%" display={tab === "My" ? undefined : "none"}>
-        <MyNFT />
-      </Box>
-      <Box w="100%" display={tab === "About" ? undefined : "none"}>
-        <About />
-      </Box>
-    </VStack>
+    <>
+      <VStack w="100%" h="100%" bg="#f8f9fd">
+        {header}
+        <Box w="100%" display={tab === "All" ? undefined : "none"}>
+          <AllNFT />
+        </Box>
+        <Box w="100%" display={tab === "My" ? undefined : "none"}>
+          <MyNFT />
+        </Box>
+        <Box w="100%" display={tab === "About" ? undefined : "none"}>
+          <About />
+        </Box>
+      </VStack>
+      <Mint />
+    </>
   );
 }
 
@@ -97,45 +101,65 @@ function MyNFT() {
 
 function About() {
   return (
-    <Center h="calc(100vh - 100px)" p="142px 32px 32px 32px" textAlign="center">
-      <VStack h="100%" justify="space-evenly">
-        <Image src={ethLogo} h="160px" />
-        <Text p="16px" fontSize="16px" fontWeight="bold">
-          You can mint one{" "}
-          {
-            <Link href="/home?nft=iu" color="#3173e0">
-              IU Chocolate
-            </Link>
-          }{" "}
-          for FREE or{" "}
-          {
-            <Link href="/home?nft=rich" color="#7b4add">
-              1 RICH for 1 MATIC
-            </Link>
-          }
-          .
-        </Text>
-        <Image src={polygonLogo} w="120px" />
-        <Text p="16px" fontSize="16px" fontWeight="bold">
-          Once you have an{" "}
-          {
-            <Link href="/home?nft=iu" color="#3173e0">
-              IU
-            </Link>
-          }{" "}
-          or{" "}
-          {
-            <Link href="/home?nft=rich" color="#7b4add">
-              RICH
-            </Link>
-          }
-          , you can update their metadata at any time for free.
-        </Text>
-        <Text p="16px" fontSize="12px" color="#8c939a">
-          *You only need to pay the GAS fee.
-        </Text>
-      </VStack>
-    </Center>
+    <VStack
+      h="100%"
+      justify="space-evenly"
+      p="142px 32px 32px 32px"
+      textAlign="center"
+    >
+      <Image src={ethLogo} h="160px" />
+      <Text p="16px" fontSize="16px" fontWeight="bold">
+        You can mint one{" "}
+        {
+          <Link
+            href="/home?nft=iu"
+            color="#3173e0"
+            _hover={{ textDecoration: "none" }}
+          >
+            <Kbd>IU Chocolate for FREE</Kbd>
+          </Link>
+        }{" "}
+        or{" "}
+        {
+          <Link
+            href="/home?nft=rich"
+            color="#7b4add"
+            _hover={{ textDecoration: "none" }}
+          >
+            <Kbd>1 RICH for 1 MATIC</Kbd>
+          </Link>
+        }
+        .
+      </Text>
+      <Box h="32px" />
+      <Image src={polygonLogo} w="120px" />
+      <Text p="16px" fontSize="16px" fontWeight="bold">
+        Once you have an{" "}
+        {
+          <Link
+            href="/home?nft=iu"
+            color="#3173e0"
+            _hover={{ textDecoration: "none" }}
+          >
+            <Kbd>IU</Kbd>
+          </Link>
+        }{" "}
+        or{" "}
+        {
+          <Link
+            href="/home?nft=rich"
+            color="#7b4add"
+            _hover={{ textDecoration: "none" }}
+          >
+            <Kbd>RICH</Kbd>
+          </Link>
+        }
+        , you can update their metadata at any time for free.
+      </Text>
+      <Text p="16px" fontSize="12px" color="#8c939a">
+        *You only need to pay the GAS fee.
+      </Text>
+    </VStack>
   );
 }
 
