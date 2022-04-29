@@ -1,15 +1,12 @@
 import ethLogo from "@/assets/eth.svg";
 import polygonLogo from "@/assets/polygon.svg";
-import { ConnectButton, Position, Tabs, ZStack } from "@/components";
+import { ConnectButton, NFT, OwnedNFT, Tabs } from "@/components";
 import {
-  AspectRatio,
   Box,
   Center,
-  Flex,
   HStack,
   Image,
   Link,
-  LinkOverlay,
   SimpleGrid,
   Spacer,
   Spinner,
@@ -17,22 +14,12 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useAccount } from "wagmi";
-import {
-  useBalanceOf,
-  useErrorToast,
-  useOwnerOf,
-  useTokenOfOwnerByIndex,
-  useTokenURI,
-  useTotalSupply,
-} from "./hooks";
-import { clamp, kZeroAddress, range, shortenAddress } from "./utils";
-import { ensAvatar, nftSrc, openseaURL } from "./utils/assets_url";
+import { useBalanceOf, useTotalSupply } from "./hooks";
+import { clamp, kZeroAddress, range } from "./utils";
 
 function Home() {
-  const nft = useSearchParams()[0].get("nft");
-  const [tab, setTab] = useState("IU Chocolate");
+  const [tab, setTab] = useState("All");
   const header = (
     <HStack
       w="100%"
@@ -49,19 +36,17 @@ function Home() {
       <ConnectButton />
     </HStack>
   );
-  const body =
-    tab === "IU Chocolate" ? (
-      <AllNFT />
-    ) : tab === "My Chocolate" ? (
-      <MyNFT />
-    ) : (
-      <About />
-    );
   return (
     <VStack w="100%" h="100%" bg="#f8f9fd">
       {header}
-      <Box p="80px 0 0 0" w="100%">
-        {body}
+      <Box w="100%" display={tab === "All" ? undefined : "none"}>
+        <AllNFT />
+      </Box>
+      <Box w="100%" display={tab === "My" ? undefined : "none"}>
+        <MyNFT />
+      </Box>
+      <Box w="100%" display={tab === "About" ? undefined : "none"}>
+        <About />
       </Box>
     </VStack>
   );
@@ -112,7 +97,7 @@ function MyNFT() {
 
 function About() {
   return (
-    <Center h="calc(100vh - 100px)" p="32px" textAlign="center">
+    <Center h="calc(100vh - 100px)" p="142px 32px 32px 32px" textAlign="center">
       <VStack h="100%" justify="space-evenly">
         <Image src={ethLogo} h="160px" />
         <Text p="16px" fontSize="16px" fontWeight="bold">
@@ -154,117 +139,14 @@ function About() {
   );
 }
 
-function NFT(p: { tokenID: number; isMine?: boolean }) {
-  const toast = useErrorToast();
-  const { uri, isLoading } = useTokenURI(p.tokenID);
-  if (!uri) return <div />;
-  const nft = JSON.parse(uri);
-  const account = !p.isMine
-    ? // eslint-disable-next-line react-hooks/rules-of-hooks
-      useOwnerOf(p.tokenID)
-    : // eslint-disable-next-line react-hooks/rules-of-hooks
-      useAccount().data?.address;
-
-  const edit = () => {
-    // todo
-    if (p.isMine) toast(p.tokenID.toString());
-  };
-  return (
-    <AspectRatio
-      ratio={3 / 4}
-      w="100%"
-      bg="#fff"
-      borderRadius="16px"
-      overflow="hidden"
-      _hover={{
-        boxShadow: "0px 24px 74px rgba(0,0,0,0.1)",
-      }}
-    >
-      {isLoading ? (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
-      ) : (
-        <LinkOverlay
-          isExternal
-          href={p.isMine ? undefined : openseaURL(p.tokenID)}
-        >
-          <Flex direction="column" w="100%" h="100%" p="16px">
-            <AspectRatio
-              ratio={1}
-              w="100%"
-              borderRadius="16px"
-              overflow="hidden"
-            >
-              <Center w="100%" h="100%">
-                <ZStack w="100%" h="100%">
-                  <Image
-                    w="100%"
-                    h="100%"
-                    src={nftSrc(nft.image)}
-                    alt={nft.name}
-                    fit="cover"
-                  />
-                  <Position w="100%" h="100%" align="center">
-                    <Center
-                      onClick={edit}
-                      w="100%"
-                      h="100%"
-                      bg="transparent"
-                      color="transparent"
-                      fontSize="16px"
-                      fontWeight="bold"
-                      _hover={
-                        p.isMine
-                          ? {
-                              bg: "rgba(0,0,0,0.2)",
-                              color: "white",
-                            }
-                          : {}
-                      }
-                    >
-                      Edit
-                    </Center>
-                  </Position>
-                </ZStack>
-              </Center>
-            </AspectRatio>
-            <VStack flex={1} w="100%" align="start" justify="space-evenly">
-              <Text p="16px 0 0 0" fontSize="16px" fontWeight="bold">
-                {nft.name}
-              </Text>
-              <HStack>
-                <Image
-                  w="24px"
-                  borderRadius="50%"
-                  src={ensAvatar(account ?? "")}
-                  alt={account}
-                />
-                <Text maxWidth="120px" overflow="clip" fontSize="14px">
-                  {shortenAddress(account ?? "")}
-                </Text>
-              </HStack>
-            </VStack>
-          </Flex>
-        </LinkOverlay>
-      )}
-    </AspectRatio>
-  );
-}
-
-function OwnedNFT(p: { index: number }) {
-  const { data: account } = useAccount();
-  const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
-  return <NFT tokenID={tokenID} isMine />;
-}
-
 function NFTGrid(p: { children: any }) {
   return (
-    <SimpleGrid w="100%" p="32px" minChildWidth="260px" gap="32px">
+    <SimpleGrid
+      w="100%"
+      p="112px 32px 32px 32px"
+      minChildWidth="260px"
+      gap="32px"
+    >
       {p.children}
     </SimpleGrid>
   );
@@ -287,17 +169,9 @@ function CenterSpinner() {
 function CenterNothing(p: { isMine?: boolean }) {
   return (
     <Center h="calc(100vh - 100px)">
-      {p.isMine ? (
-        <VStack>
-          <Text p="0 15px 0 0" fontSize="16px" fontWeight="bold">
-            You don't have an IU Chocolate yet.
-          </Text>
-        </VStack>
-      ) : (
-        <Text p="0 15px 0 0" fontSize="16px" fontWeight="bold">
-          Nothing...
-        </Text>
-      )}
+      <Text p="0 15px 0 0" fontSize="16px" fontWeight="bold">
+        Nothing...
+      </Text>
     </Center>
   );
 }

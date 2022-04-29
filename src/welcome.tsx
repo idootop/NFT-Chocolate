@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Welcome() {
   return (
-    <ZStack width="100%" height="100%">
+    <ZStack width="100%" height="100vh">
       <Image
         width="100%"
         height="100%"

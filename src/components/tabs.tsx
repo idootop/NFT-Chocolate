@@ -1,5 +1,5 @@
 import down from "@/assets/down.svg";
-import { useIsPC } from "@/hooks";
+import { useIsPC, useNFT } from "@/hooks";
 import {
   HStack,
   Image,
@@ -12,6 +12,16 @@ import {
 
 export function Tabs(p: { tab: string; setTab: (tab: string) => void }) {
   const isPC = useIsPC();
+  const nft = useNFT();
+  const tabs = nft === "iu" ? ["IU", "My", "About"] : ["RICH", "My", "About"];
+  const tabsMenu =
+    nft === "iu"
+      ? ["IU Chocolate", "My Chocolate", "About"]
+      : ["Pretend I'M RICH", "My RICH", "About"];
+  const options = ["All", "My", "About"];
+  const setTab = (o: string) => {
+    p.setTab(options[tabsMenu.indexOf(o)]);
+  };
   if (!isPC) {
     return (
       <Menu>
@@ -32,7 +42,7 @@ export function Tabs(p: { tab: string; setTab: (tab: string) => void }) {
         >
           <HStack>
             <Text maxWidth="120px" overflow="clip">
-              {p.tab.split(" ")[0]}
+              {tabs[options.indexOf(p.tab)]}
             </Text>
             <Image w="24px" src={down} alt="down" />
           </HStack>
@@ -46,24 +56,22 @@ export function Tabs(p: { tab: string; setTab: (tab: string) => void }) {
           bg="#fff"
           overflow="hidden"
         >
-          <TabItem setTab={p.setTab}>IU Chocolate</TabItem>
-          <TabItem setTab={p.setTab}>My Chocolate</TabItem>
-          <TabItem setTab={p.setTab}>About</TabItem>
+          {tabsMenu.map((e) => (
+            <TabItem key={e} setTab={setTab}>
+              {e}
+            </TabItem>
+          ))}
         </MenuList>
       </Menu>
     );
   }
   return (
     <>
-      <Tab active={p.tab} setTab={p.setTab}>
-        IU Chocolate
-      </Tab>
-      <Tab active={p.tab} setTab={p.setTab}>
-        My Chocolate
-      </Tab>
-      <Tab active={p.tab} setTab={p.setTab}>
-        About
-      </Tab>
+      {tabsMenu.map((e) => (
+        <Tab key={e} active={tabsMenu[options.indexOf(p.tab)]} setTab={setTab}>
+          {e}
+        </Tab>
+      ))}
     </>
   );
 }
