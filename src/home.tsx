@@ -20,7 +20,7 @@ import { useBalanceOf, useTotalSupply } from "./hooks";
 import { clamp, kZeroAddress, range } from "./utils";
 
 function Home() {
-  const [tab, setTab] = useState("About");
+  const [tab, setTab] = useState("All");
   const header = (
     <HStack
       w="100%"

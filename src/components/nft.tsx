@@ -1,44 +1,47 @@
 import { Position, ZStack } from "@/components";
 import {
-    useErrorToast,
-    useIsPC,
-    useOwnerOf,
-    useTokenOfOwnerByIndex,
-    useTokenURI
+  useErrorToast,
+  useIsPC,
+  useNFT,
+  useNFTName,
+  useOwnerOf,
+  useTokenOfOwnerByIndex,
+  useTokenURI,
 } from "@/hooks";
 import {
-    ensAvatar,
-    ipfsUpload,
-    nftSrc,
-    openseaURL,
-    shortenAddress
+  ensAvatar,
+  ipfsUpload,
+  isEmpty,
+  nftSrc,
+  openseaURL,
+  shortenAddress,
 } from "@/utils";
 import {
-    AspectRatio,
-    Button,
-    Center,
-    Flex,
-    FormControl,
-    FormLabel,
-    HStack,
-    Image,
-    Input,
-    LinkOverlay,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Spinner,
-    Text,
-    useBoolean,
-    useDisclosure,
-    VStack
+  AspectRatio,
+  Button,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Image,
+  Input,
+  LinkOverlay,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  Text,
+  useBoolean,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { nextTick } from "process";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ImageUploader from "react-images-upload";
 import { useAccount } from "wagmi";
 
@@ -132,10 +135,19 @@ function EditMask(p: {
 }) {
   const isPC = useIsPC();
   const toast = useErrorToast();
-  const initialRef = useRef<any>();
-  const [img, setImg] = useState();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const nftName = useNFTName();
+  const isRICH = useNFT() === "rich";
+  const [nft, setNFT] = useState({
+    to: "",
+    name: "",
+    desp: "",
+    image: undefined,
+  });
+  const setImg = (s: any) => setNFT({ ...nft, image: s });
+  const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
+  const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
 
   const onDrop = (picture: any) => {
     setImg(picture[0]);
@@ -153,18 +165,26 @@ function EditMask(p: {
   };
   const submit = async () => {
     if (!p.isMine) return;
-    if (!img) {
+    if (isRICH && isEmpty(nft.name)) {
+      toast("Please set your NFT's name first!");
+      return;
+    }
+    if (isEmpty(nft.desp)) {
+      toast("Please set your NFT's description first!");
+      return;
+    }
+    if (!nft.image) {
       toast("Please set your NFT image first!");
       return;
     }
     startUpload();
-    const uri = await ipfsUpload(img);
+    const uri = await ipfsUpload(nft.image);
     if (!uri) {
       toast(uri ?? "Upload Image to IPFS failure!");
       endUpload();
       return;
     }
-    toast(uri);
+    nft.image = uri as any;
     // todo write contract
     endUpload();
     onClose();
@@ -202,22 +222,36 @@ function EditMask(p: {
           <ModalHeader>Update Metadata</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
+            {isRICH && (
+              <FormControl>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  placeholder={nftName}
+                  value={nft.name}
+                  onChange={setName}
+                />
+              </FormControl>
+            )}
+            <FormControl mt={isRICH ? 4 : 0}>
               <FormLabel>Description</FormLabel>
-              <Input ref={initialRef} placeholder="What's it?" />
+              <Input
+                placeholder="What's it?"
+                value={nft.desp}
+                onChange={setDesp}
+              />
             </FormControl>
 
             <FormControl mt={4}>
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
-                withIcon={!img}
-                withPreview={img}
+                withIcon={!nft.image}
+                withPreview={nft.image}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}
                 buttonText="Choose Image"
                 buttonStyles={{
-                  display: img ? "none" : undefined,
+                  display: nft.image ? "none" : undefined,
                 }}
                 fileContainerStyle={{
                   border: "1px dashed #cccccc",

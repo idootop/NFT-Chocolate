@@ -1,5 +1,11 @@
-import { useErrorToast, useIsPC, useNFTColor } from "@/hooks";
-import { ipfsUpload } from "@/utils";
+import {
+  useErrorToast,
+  useIsPC,
+  useNFT,
+  useNFTColor,
+  useNFTName,
+} from "@/hooks";
+import { ipfsUpload, isEmpty } from "@/utils";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -19,19 +25,29 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { nextTick } from "process";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ImageUploader from "react-images-upload";
 import { useAccount } from "wagmi";
 
 export function Mint() {
   const isPC = useIsPC();
   const toast = useErrorToast();
-  const initialRef = useRef<any>();
-  const [img, setImg] = useState();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: account } = useAccount();
   const nftColor = useNFTColor();
+  const nftName = useNFTName();
+  const isRICH = useNFT() === "rich";
+  const [nft, setNFT] = useState({
+    to: "",
+    name: "",
+    desp: "",
+    image: undefined,
+  });
+  const setImg = (s: any) => setNFT({ ...nft, image: s });
+  const setTo = (event: any) => setNFT({ ...nft, to: event.target.value });
+  const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
+  const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
 
   const onDrop = (picture: any) => {
     setImg(picture[0]);
@@ -49,18 +65,30 @@ export function Mint() {
     onOpen();
   };
   const submit = async () => {
-    if (!img) {
+    if (isEmpty(nft.to)) {
+      toast("Please set your NFT's owner address first!");
+      return;
+    }
+    if (isEmpty(nft.name)) {
+      toast("Please set your NFT's name first!");
+      return;
+    }
+    if (isEmpty(nft.desp)) {
+      toast("Please set your NFT's description first!");
+      return;
+    }
+    if (!nft.image) {
       toast("Please set your NFT image first!");
       return;
     }
     startUpload();
-    const uri = await ipfsUpload(img);
+    const uri = await ipfsUpload(nft.image);
     if (!uri) {
       toast(uri ?? "Upload Image to IPFS failure!");
       endUpload();
       return;
     }
-    toast(uri);
+    nft.image = uri as any;
     // todo write contract
     endUpload();
     onClose();
@@ -97,21 +125,42 @@ export function Mint() {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>Description</FormLabel>
-              <Input ref={initialRef} placeholder="What's it?" />
+              <FormLabel>Address</FormLabel>
+              <Input
+                placeholder="Mint to whom?"
+                value={nft.to === "" ? account?.address : nft.to}
+                onChange={setTo}
+              />
             </FormControl>
-
+            {isRICH && (
+              <FormControl mt={4}>
+                <FormLabel>Name</FormLabel>
+                <Input
+                  placeholder={nftName}
+                  value={nft.name}
+                  onChange={setName}
+                />
+              </FormControl>
+            )}
+            <FormControl mt={4}>
+              <FormLabel>Description</FormLabel>
+              <Input
+                placeholder="What's it?"
+                value={nft.desp}
+                onChange={setDesp}
+              />
+            </FormControl>
             <FormControl mt={4}>
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
-                withIcon={!img}
-                withPreview={img}
+                withIcon={!nft.image}
+                withPreview={nft.image}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}
                 buttonText="Choose Image"
                 buttonStyles={{
-                  display: img ? "none" : undefined,
+                  display: nft.image ? "none" : undefined,
                 }}
                 fileContainerStyle={{
                   border: "1px dashed #cccccc",
