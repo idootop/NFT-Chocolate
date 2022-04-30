@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { useBalanceOf, useTotalSupply } from "./hooks";
+import { useBalanceOf, useNFT, useTotalSupply } from "./hooks";
 import { clamp, kZeroAddress, range } from "./utils";
 
 function Home() {
@@ -99,11 +99,13 @@ function MyNFT() {
 }
 
 function ALink(p: { to: "iu" | "rich"; text: string }) {
+  const nft = useNFT();
   return (
     <Kbd
       cursor="pointer"
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       onClick={() => {
+        if (nft === p.to) return;
         window.open("/NFT-Chocolate/index.html?nft=" + p.to)?.focus();
       }}
     >
