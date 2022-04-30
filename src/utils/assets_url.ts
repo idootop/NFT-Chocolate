@@ -13,5 +13,5 @@ export function nftSrc(src: string) {
 export function openseaURL(tokenID: number, isRICH: boolean) {
   return `https://rarible.com/token/polygon/${
     isRICH ? kRICHContractAddress : kIUContractAddress
-  }/${tokenID}`.toLowerCase();
+  }:${tokenID}`.toLowerCase();
 }
