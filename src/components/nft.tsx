@@ -48,6 +48,7 @@ import {
 import { nextTick } from "process";
 import { useState } from "react";
 import ImageUploader from "react-images-upload";
+import { Link as ReachLink } from "react-router-dom";
 import { useAccount } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
@@ -90,7 +91,8 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
       ) : (
         <LinkOverlay
           isExternal
-          href={p.isMine ? undefined : openseaURL(p.tokenID, isRICH)}
+          as={ReachLink}
+          to={p.isMine ? (undefined as any) : openseaURL(p.tokenID, isRICH)}
         >
           <Flex direction="column" w="100%" h="100%" p="16px">
             <AspectRatio
@@ -244,7 +246,7 @@ function EditMask(p: {
             : {}
         }
       >
-        <Text>Edit</Text>
+        Edit
       </Center>
       <Modal
         isOpen={isOpen}

@@ -1,6 +1,7 @@
 import ethLogo from "@/assets/eth.svg";
 import polygonLogo from "@/assets/polygon.svg";
 import { ConnectButton, NFT, OwnedNFT, Tabs, Mint } from "@/components";
+import { Link as ReachLink } from "react-router-dom";
 import {
   Box,
   Center,
@@ -102,13 +103,12 @@ function MyNFT() {
 function ALink(p: { to: "iu" | "rich"; text: string }) {
   return (
     <Link
-      href={"/NFT-Chocolate/index.html?nft=" + p.to}
+      as={ReachLink}
+      to={"/NFT-Chocolate/index.html?nft=" + p.to}
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       _hover={{ textDecoration: "none" }}
     >
-      <Kbd>
-        <Text>{p.text}</Text>
-      </Kbd>
+      <Kbd>{p.text}</Kbd>
     </Link>
   );
 }
