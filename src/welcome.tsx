@@ -1,6 +1,7 @@
 import { LButton, ZStack } from "@/components";
 import { Box, Center, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import bg from "./assets/bg.png";
 
 function Welcome() {
   return (
@@ -10,7 +11,7 @@ function Welcome() {
         height="100%"
         fit="cover"
         position="relative"
-        src="https://cdn.dribbble.com/users/5930377/screenshots/14190248/media/be259cb4bce1adb47ccb5c2c7c2b49c6.png"
+        src={bg}
       ></Image>
       <Center width="100%" height="100%">
         <VStack>
