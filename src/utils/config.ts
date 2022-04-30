@@ -2,7 +2,6 @@ import iu from "@/assets/IUChocolate.json";
 import rich from "@/assets/RICH.json";
 
 export const kIsProd = process.env.PROD;
-console.log("kIsProd", kIsProd);
 export const kChainId = 137;
 
 export const kIUContractAddress = !kIsProd
