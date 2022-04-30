@@ -11,7 +11,7 @@ export function nftSrc(src: string) {
 }
 
 export function openseaURL(tokenID: number, isRICH: boolean) {
-  return `https://opensea.io/assets/matic/${
+  return `https://rarible.com/token/polygon/${
     isRICH ? kRICHContractAddress : kIUContractAddress
   }/${tokenID}`;
 }
