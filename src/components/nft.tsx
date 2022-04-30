@@ -92,6 +92,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
           w="100%"
           h="100%"
           p="16px"
+          cursor="pointer"
           onClick={() => {
             if (!p.isMine)
               window.open(openseaURL(p.tokenID, isRICH), "_blank")?.focus();
