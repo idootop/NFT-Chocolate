@@ -1,0 +1,42 @@
+name: 'Build & Deploy React App to Github Pages'
+
+on: 
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps: 
+      # 第一步 拉代码
+      - name: Checkout ⚡️
+        uses: actions/checkout@v2
+      
+      # 第二步 缓存node modules
+      - name: Cache node modules 🚮
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-${{ env.cache-name }}-
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      # 第三步 安装依赖打包
+      - name: Install and Build 🔧  
+        run: |
+          npm install -g yarn
+          yarn install
+          yarn build
+        shell: bash
+
+      # 第四步 将打包后的文件推送至下面填写的分支，部署到github的静态页
+      - name: Deploy 🚀 
+        id: 'deploy'
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+          BRANCH: static-page # 编译文件分支
+          FOLDER: build # 编译文件的文件夹

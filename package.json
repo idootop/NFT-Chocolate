@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "export PROD=false && react-app-rewired start",
-    "build": "export PROD=true && react-app-rewired build",
+    "start": "react-app-rewired start",
+    "build": "PROD=true react-app-rewired build",
+    "server": "PROD=true react-app-rewired build && browser-sync start --server build",
     "test": "react-app-rewired test"
   },
   "dependencies": {

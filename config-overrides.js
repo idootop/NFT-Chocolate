@@ -23,7 +23,7 @@ module.exports = function override(config) {
       process: "process/browser",
       Buffer: ["buffer", "Buffer"],
     }),
-    new Dotenv(),
+    new Dotenv({ systemvars: true }),
   ]);
   config.module.rules.push({
     test: /\.m?js/,

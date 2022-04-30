@@ -23,7 +23,7 @@ function Welcome() {
             NFT Chocolate
           </Text>
           <Box h="4"></Box>
-          <Link to="/home">
+          <Link to="/index.html">
             <LButton color="#3478f6" bg="#dceafd">
               Mint now
             </LButton>

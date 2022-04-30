@@ -2,6 +2,7 @@ import iu from "@/assets/IUChocolate.json";
 import rich from "@/assets/RICH.json";
 
 export const kIsProd = process.env.PROD;
+console.log("kIsProd", kIsProd);
 export const kChainId = 137;
 
 export const kIUContractAddress = !kIsProd
@@ -18,5 +19,5 @@ export const kRICHContractConfig = {
   addressOrName: kRICHContractAddress,
   contractInterface: rich,
 };
-export const kOneETH = 10n ** 18n;
+export const kOneETH = 10 ** 18;
 export const kZeroAddress = "0x0000000000000000000000000000000000000000";
