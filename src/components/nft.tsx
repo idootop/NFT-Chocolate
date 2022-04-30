@@ -31,8 +31,6 @@ import {
   HStack,
   Image,
   Input,
-  LinkBox,
-  LinkOverlay,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -49,7 +47,6 @@ import {
 import { nextTick } from "process";
 import { useState } from "react";
 import ImageUploader from "react-images-upload";
-import { Link as ReachLink } from "react-router-dom";
 import { useAccount } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
@@ -90,63 +87,59 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
           size="xl"
         />
       ) : (
-        <LinkBox>
-          <LinkOverlay
-            isExternal
-            as={ReachLink}
-            to={p.isMine ? (undefined as any) : openseaURL(p.tokenID, isRICH)}
-          >
-            <Flex direction="column" w="100%" h="100%" p="16px">
-              <AspectRatio
-                ratio={1}
-                w="100%"
-                borderRadius="16px"
-                overflow="hidden"
-              >
-                <Center w="100%" h="100%">
-                  <ZStack w="100%" h="100%">
-                    <Center
-                      w="100%"
-                      h="100%"
-                      bgImage={ethLogo}
-                      bgRepeat="no-repeat"
-                      bgPosition="center"
-                      bgSize="50%"
-                      color="transparent"
-                    >
-                      <Image
-                        w="100%"
-                        h="100%"
-                        src={nftSrc(nft.image)}
-                        alt={nft.name}
-                        fit="cover"
-                      />
-                    </Center>
-                    <Position w="100%" h="100%" align="center">
-                      <EditMask nft={nft} isMine={p.isMine ?? false} />
-                    </Position>
-                  </ZStack>
-                </Center>
-              </AspectRatio>
-              <VStack flex={1} w="100%" align="start" justify="space-evenly">
-                <Text p="16px 0 0 0" fontSize="16px" fontWeight="bold">
-                  {nft.name}
-                </Text>
-                <HStack>
+        <Flex
+          direction="column"
+          w="100%"
+          h="100%"
+          p="16px"
+          onClick={() => {
+            if (!p.isMine)
+              window.open(openseaURL(p.tokenID, isRICH), "_blank")?.focus();
+          }}
+        >
+          <AspectRatio ratio={1} w="100%" borderRadius="16px" overflow="hidden">
+            <Center w="100%" h="100%">
+              <ZStack w="100%" h="100%">
+                <Center
+                  w="100%"
+                  h="100%"
+                  bgImage={ethLogo}
+                  bgRepeat="no-repeat"
+                  bgPosition="center"
+                  bgSize="50%"
+                  color="transparent"
+                >
                   <Image
-                    w="24px"
-                    borderRadius="50%"
-                    src={ensAvatar(account ?? "")}
-                    alt={account}
+                    w="100%"
+                    h="100%"
+                    src={nftSrc(nft.image)}
+                    alt={nft.name}
+                    fit="cover"
                   />
-                  <Text maxWidth="120px" overflow="clip" fontSize="14px">
-                    {shortenAddress(account ?? "")}
-                  </Text>
-                </HStack>
-              </VStack>
-            </Flex>
-          </LinkOverlay>
-        </LinkBox>
+                </Center>
+                <Position w="100%" h="100%" align="center">
+                  <EditMask nft={nft} isMine={p.isMine ?? false} />
+                </Position>
+              </ZStack>
+            </Center>
+          </AspectRatio>
+          <VStack flex={1} w="100%" align="start" justify="space-evenly">
+            <Text p="16px 0 0 0" fontSize="16px" fontWeight="bold">
+              {nft.name}
+            </Text>
+            <HStack>
+              <Image
+                w="24px"
+                borderRadius="50%"
+                src={ensAvatar(account ?? "")}
+                alt={account}
+              />
+              <Text maxWidth="120px" overflow="clip" fontSize="14px">
+                {shortenAddress(account ?? "")}
+              </Text>
+            </HStack>
+          </VStack>
+        </Flex>
       )}
     </AspectRatio>
   );
