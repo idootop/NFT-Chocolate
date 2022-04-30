@@ -1,19 +1,16 @@
 import ethLogo from "@/assets/eth.svg";
 import polygonLogo from "@/assets/polygon.svg";
-import { ConnectButton, NFT, OwnedNFT, Tabs, Mint } from "@/components";
-import { Link as ReachLink } from "react-router-dom";
+import { ConnectButton, Mint, NFT, OwnedNFT, Tabs } from "@/components";
 import {
   Box,
   Center,
   HStack,
   Image,
-  Kbd,
-  Link,
-  SimpleGrid,
+  Kbd, SimpleGrid,
   Spacer,
   Spinner,
   Text,
-  VStack,
+  VStack
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -102,14 +99,14 @@ function MyNFT() {
 
 function ALink(p: { to: "iu" | "rich"; text: string }) {
   return (
-    <Link
-      as={ReachLink}
-      to={"/index.html?nft=" + p.to}
+    <Kbd
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
-      _hover={{ textDecoration: "none" }}
+      onClick={() => {
+        window.open("/index.html?nft=" + p.to)?.focus();
+      }}
     >
-      <Kbd>{p.text}</Kbd>
-    </Link>
+      {p.text}
+    </Kbd>
   );
 }
 
