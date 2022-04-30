@@ -1,28 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.9c6f9b40.css",
-    "main.js": "/static/js/main.d6e8a6ea.js",
-    "static/js/27.259d8acd.chunk.js": "/static/js/27.259d8acd.chunk.js",
-    "static/js/563.e6d2823b.chunk.js": "/static/js/563.e6d2823b.chunk.js",
-    "static/js/84.6a289a53.chunk.js": "/static/js/84.6a289a53.chunk.js",
-    "static/js/419.8c0313bf.chunk.js": "/static/js/419.8c0313bf.chunk.js",
-    "static/js/163.a3b59883.chunk.js": "/static/js/163.a3b59883.chunk.js",
-    "static/media/metamask.svg": "/static/media/metamask.968cb5bd26336adf461aa7f31af616ff.svg",
-    "static/media/UploadIcon.svg": "/static/media/UploadIcon.469126df4127e870c21611e576b85d00.svg",
-    "static/media/walletconnect.svg": "/static/media/walletconnect.a6d7a6da6401771d3c61d88b42dd51de.svg",
-    "static/media/eth.svg": "/static/media/eth.49e75a787299e66870f7062b52667e03.svg",
-    "static/media/polygon.svg": "/static/media/polygon.eac3b5bb94b5760aeb108cc4d95c9921.svg",
-    "static/media/coinbase.svg": "/static/media/coinbase.5074806074f37ccfae2acb7be30aa6c4.svg",
-    "index.html": "/index.html",
-    "static/media/down.svg": "/static/media/down.74b0ea515aaaf8653c34f975ac9c0894.svg",
-    "main.9c6f9b40.css.map": "/static/css/main.9c6f9b40.css.map",
-    "main.d6e8a6ea.js.map": "/static/js/main.d6e8a6ea.js.map",
-    "84.6a289a53.chunk.js.map": "/static/js/84.6a289a53.chunk.js.map",
-    "419.8c0313bf.chunk.js.map": "/static/js/419.8c0313bf.chunk.js.map",
-    "163.a3b59883.chunk.js.map": "/static/js/163.a3b59883.chunk.js.map"
+    "main.css": "/NFT-Chocolate/static/css/main.9c6f9b40.css",
+    "main.js": "/NFT-Chocolate/static/js/main.341198a2.js",
+    "static/js/27.259d8acd.chunk.js": "/NFT-Chocolate/static/js/27.259d8acd.chunk.js",
+    "static/js/563.e6d2823b.chunk.js": "/NFT-Chocolate/static/js/563.e6d2823b.chunk.js",
+    "static/js/84.6a289a53.chunk.js": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js",
+    "static/js/419.b30ae3e4.chunk.js": "/NFT-Chocolate/static/js/419.b30ae3e4.chunk.js",
+    "static/js/163.a3b59883.chunk.js": "/NFT-Chocolate/static/js/163.a3b59883.chunk.js",
+    "static/media/metamask.svg": "/NFT-Chocolate/static/media/metamask.968cb5bd26336adf461aa7f31af616ff.svg",
+    "static/media/UploadIcon.svg": "/NFT-Chocolate/static/media/UploadIcon.469126df4127e870c21611e576b85d00.svg",
+    "static/media/walletconnect.svg": "/NFT-Chocolate/static/media/walletconnect.a6d7a6da6401771d3c61d88b42dd51de.svg",
+    "static/media/eth.svg": "/NFT-Chocolate/static/media/eth.49e75a787299e66870f7062b52667e03.svg",
+    "static/media/polygon.svg": "/NFT-Chocolate/static/media/polygon.eac3b5bb94b5760aeb108cc4d95c9921.svg",
+    "static/media/coinbase.svg": "/NFT-Chocolate/static/media/coinbase.5074806074f37ccfae2acb7be30aa6c4.svg",
+    "index.html": "/NFT-Chocolate/index.html",
+    "static/media/down.svg": "/NFT-Chocolate/static/media/down.74b0ea515aaaf8653c34f975ac9c0894.svg",
+    "main.9c6f9b40.css.map": "/NFT-Chocolate/static/css/main.9c6f9b40.css.map",
+    "main.341198a2.js.map": "/NFT-Chocolate/static/js/main.341198a2.js.map",
+    "84.6a289a53.chunk.js.map": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js.map",
+    "419.b30ae3e4.chunk.js.map": "/NFT-Chocolate/static/js/419.b30ae3e4.chunk.js.map",
+    "163.a3b59883.chunk.js.map": "/NFT-Chocolate/static/js/163.a3b59883.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9c6f9b40.css",
-    "static/js/main.d6e8a6ea.js"
+    "static/js/main.341198a2.js"
   ]
 }
