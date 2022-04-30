@@ -99,6 +99,20 @@ function MyNFT() {
   );
 }
 
+function ALink(p: { to: "iu" | "rich"; text: string }) {
+  return (
+    <Link
+      href={"/NFT-Chocolate/index.html?nft=" + p.to}
+      color={p.to === "iu" ? "#3173e0" : "#7b4add"}
+      _hover={{ textDecoration: "none" }}
+    >
+      <Kbd>
+        <Text>{p.text}</Text>
+      </Kbd>
+    </Link>
+  );
+}
+
 function About() {
   return (
     <VStack
@@ -109,52 +123,15 @@ function About() {
     >
       <Image src={ethLogo} h="160px" />
       <Text p="16px" fontSize="16px" fontWeight="bold">
-        You can mint one{" "}
-        {
-          <Link
-            href="/NFT-Chocolate/index.html?nft=iu"
-            color="#3173e0"
-            _hover={{ textDecoration: "none" }}
-          >
-            <Kbd>IU Chocolate for FREE</Kbd>
-          </Link>
-        }{" "}
-        or{" "}
-        {
-          <Link
-            href="/NFT-Chocolate/index.html?nft=rich"
-            color="#7b4add"
-            _hover={{ textDecoration: "none" }}
-          >
-            <Kbd>1 RICH for 1 MATIC</Kbd>
-          </Link>
-        }
-        .
+        You can mint one <ALink to="iu" text="IU Chocolate for FREE" /> or{" "}
+        <ALink to="rich" text="1 RICH for 1 MATIC" />.
       </Text>
       <Box h="32px" />
       <Image src={polygonLogo} w="120px" />
       <Text p="16px" fontSize="16px" fontWeight="bold">
-        Once you have an{" "}
-        {
-          <Link
-            href="/NFT-Chocolate/index.html?nft=iu"
-            color="#3173e0"
-            _hover={{ textDecoration: "none" }}
-          >
-            <Kbd>IU</Kbd>
-          </Link>
-        }{" "}
-        or{" "}
-        {
-          <Link
-            href="/NFT-Chocolate/index.html?nft=rich"
-            color="#7b4add"
-            _hover={{ textDecoration: "none" }}
-          >
-            <Kbd>RICH</Kbd>
-          </Link>
-        }
-        , you can update their metadata at any time for free.
+        Once you have an <ALink to="iu" text="IU" /> or{" "}
+        <ALink to="rich" text="RICH" />, you can update their metadata at any
+        time for free.
       </Text>
       <Text p="16px" fontSize="12px" color="#8c939a">
         *You only need to pay the GAS fee.

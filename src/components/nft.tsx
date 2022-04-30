@@ -90,7 +90,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
       ) : (
         <LinkOverlay
           isExternal
-          href={p.isMine ? undefined : openseaURL(p.tokenID,isRICH)}
+          href={p.isMine ? undefined : openseaURL(p.tokenID, isRICH)}
         >
           <Flex direction="column" w="100%" h="100%" p="16px">
             <AspectRatio
@@ -244,7 +244,7 @@ function EditMask(p: {
             : {}
         }
       >
-        Edit
+        <Text>Edit</Text>
       </Center>
       <Modal
         isOpen={isOpen}
