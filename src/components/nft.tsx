@@ -60,6 +60,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
   const { uri, isLoading } = useTokenURI(p.tokenID);
   const nft = JSON.parse(uri ?? "{}");
   nft.tokenID = p.tokenID;
+  const isRICH = useNFT() === "rich";
   const account = !p.isMine
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useOwnerOf(p.tokenID)
@@ -89,7 +90,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
       ) : (
         <LinkOverlay
           isExternal
-          href={p.isMine ? undefined : openseaURL(p.tokenID)}
+          href={p.isMine ? undefined : openseaURL(p.tokenID,isRICH)}
         >
           <Flex direction="column" w="100%" h="100%" p="16px">
             <AspectRatio

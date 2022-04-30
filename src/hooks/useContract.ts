@@ -20,8 +20,8 @@ const noWatch = {
 export const useSwitchNetwork = () => {
   const id = kIsProd ? 137 : 1337;
   const { activeChain, switchNetworkAsync } = useNetwork();
-  return async () => {
-    if (id === activeChain?.id) return true;
+  return async (chainId?: any) => {
+    if (id === activeChain?.id || chainId === id) return true;
     const chain = await switchNetworkAsync?.(id).catch(() => undefined);
     return chain?.id === id;
   };

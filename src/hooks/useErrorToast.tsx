@@ -90,7 +90,7 @@ export function useTipToast() {
   const color = useNFTColor();
   return (text: string) =>
     toast({
-      duration: 5000,
+      duration: 3000,
       position: "top",
       render: () => (
         <Center

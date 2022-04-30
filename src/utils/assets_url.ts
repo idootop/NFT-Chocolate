@@ -1,4 +1,4 @@
-import { kIUContractAddress } from "./config";
+import { kIUContractAddress, kRICHContractAddress } from "./config";
 
 export function ensAvatar(address: string) {
   return "https://stamp.fyi/avatar/" + address;
@@ -10,6 +10,8 @@ export function nftSrc(src: string) {
     : src;
 }
 
-export function openseaURL(tokenID: number) {
-  return `https://opensea.io/assets/matic/${kIUContractAddress}/${tokenID}`;
+export function openseaURL(tokenID: number, isRICH: boolean) {
+  return `https://opensea.io/assets/matic/${
+    isRICH ? kRICHContractAddress : kIUContractAddress
+  }/${tokenID}`;
 }

@@ -22,19 +22,20 @@ export function ConnectButton() {
   const { disconnect } = useDisconnect();
   const nftColor = useNFTColor();
   const switchNetwork = useSwitchNetwork();
-  const { connectors, connect } = useConnect({
+  const { connectors, connectAsync } = useConnect({
     onError(error) {
       toast(error?.message ?? "Failed to connect");
     },
-    onConnect() {
-      setTimeout(async () => {
-        if (!(await switchNetwork())) {
+  });
+  const onClickConnect = (connector: any) =>
+    connectAsync(connector)
+      .catch(() => undefined)
+      .then(async (e) => {
+        if (!(await switchNetwork(e?.chain.id))) {
           toast("Please switch your network to Polygon first!");
           return;
         }
-      }, 1000);
-    },
-  });
+      });
 
   if (account) {
     return (
@@ -146,7 +147,7 @@ export function ConnectButton() {
               }}
               disabled={!connector.ready}
               key={connector.id}
-              onClick={() => connect(connector)}
+              onClick={() => onClickConnect(connector)}
             >
               <Image
                 src={
