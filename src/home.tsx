@@ -112,7 +112,7 @@ function About() {
         You can mint one{" "}
         {
           <Link
-            href="/index.html?nft=iu"
+            href="/NFT-Chocolate/index.html?nft=iu"
             color="#3173e0"
             _hover={{ textDecoration: "none" }}
           >
@@ -122,7 +122,7 @@ function About() {
         or{" "}
         {
           <Link
-            href="/index.html?nft=rich"
+            href="/NFT-Chocolate/index.html?nft=rich"
             color="#7b4add"
             _hover={{ textDecoration: "none" }}
           >
@@ -137,7 +137,7 @@ function About() {
         Once you have an{" "}
         {
           <Link
-            href="/index.html?nft=iu"
+            href="/NFT-Chocolate/index.html?nft=iu"
             color="#3173e0"
             _hover={{ textDecoration: "none" }}
           >
@@ -147,7 +147,7 @@ function About() {
         or{" "}
         {
           <Link
-            href="/index.html?nft=rich"
+            href="/NFT-Chocolate/index.html?nft=rich"
             color="#7b4add"
             _hover={{ textDecoration: "none" }}
           >
