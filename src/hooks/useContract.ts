@@ -1,19 +1,30 @@
 import {
   clamp,
   decodeTokenURI,
+  kIsProd,
   kIUContractConfig,
   kOneETH,
   kRICHContractConfig,
   range,
 } from "@/utils";
 import { readContract, writeContract } from "@wagmi/core";
-import { useContractEvent, useContractRead } from "wagmi";
+import { useContractEvent, useContractRead, useNetwork } from "wagmi";
 import { useErrorToast } from ".";
 import { useAsync } from "./useAsync";
 import { useNFT } from "./useNFT";
 
 const noWatch = {
   watch: false,
+};
+
+export const useSwitchNetwork = () => {
+  const id = kIsProd ? 137 : 1337;
+  const { activeChain, switchNetworkAsync } = useNetwork();
+  return async () => {
+    if (id === activeChain?.id) return true;
+    const chain = await switchNetworkAsync?.(id).catch(() => undefined);
+    return chain?.id === id;
+  };
 };
 
 export function useEventListener(event: string, listener: (e: any) => any) {
@@ -45,6 +56,8 @@ export function useMint(nft: any) {
             ? isRICH
               ? "At least 1 MATIC needs to be paid to mint 1 RICH."
               : "Each person can only have 1 IU Chocolate."
+            : e?.data?.message
+            ? e?.data?.message
             : e.toString()
         );
       }
@@ -67,6 +80,8 @@ export function useUpdate(nft: any) {
         toast(
           e?.data?.message?.includes("revert")
             ? "You're not the owner."
+            : e?.data?.message
+            ? e?.data?.message
             : e.toString()
         );
       }

@@ -1,47 +1,49 @@
 import ethLogo from "@/assets/eth.svg";
 import { Position, ZStack } from "@/components";
 import {
-    useErrorToast,
-    useIsPC,
-    useNFT,
-    useNFTName,
-    useOwnerOf,
-    useSuccessToast,
-    useTokenOfOwnerByIndex,
-    useTokenURI,
-    useUpdate
+  useErrorToast,
+  useIsPC,
+  useNFT,
+  useNFTName,
+  useOwnerOf,
+  useSuccessToast,
+  useSwitchNetwork,
+  useTipToast,
+  useTokenOfOwnerByIndex,
+  useTokenURI,
+  useUpdate,
 } from "@/hooks";
 import {
-    ensAvatar,
-    ipfsUpload,
-    isEmpty,
-    nftSrc,
-    openseaURL,
-    shortenAddress
+  ensAvatar,
+  ipfsUpload,
+  isEmpty,
+  nftSrc,
+  openseaURL,
+  shortenAddress,
 } from "@/utils";
 import {
-    AspectRatio,
-    Button,
-    Center,
-    Flex,
-    FormControl,
-    FormLabel,
-    HStack,
-    Image,
-    Input,
-    LinkOverlay,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Spinner,
-    Text,
-    useBoolean,
-    useDisclosure,
-    VStack
+  AspectRatio,
+  Button,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Image,
+  Input,
+  LinkOverlay,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  Text,
+  useBoolean,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import { nextTick } from "process";
 import { useState } from "react";
@@ -151,6 +153,7 @@ function EditMask(p: {
   const isPC = useIsPC();
   const toast = useErrorToast();
   const success = useSuccessToast();
+  const tip = useTipToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const nftName = useNFTName();
@@ -163,6 +166,7 @@ function EditMask(p: {
     tokenID: p.nft.tokenID,
   });
   const writeUpdate = useUpdate(nft);
+  const switchNetwork = useSwitchNetwork();
   const setImg = (s: any) => setNFT({ ...nft, image: s });
   const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
@@ -195,6 +199,10 @@ function EditMask(p: {
       toast("Please set your NFT image first!");
       return;
     }
+    if (!(await switchNetwork())) {
+      toast("Please switch your network to Polygon first!");
+      return;
+    }
     startUpload();
     const uri = await ipfsUpload(nft.image);
     if (!uri) {
@@ -208,9 +216,11 @@ function EditMask(p: {
       endUpload();
       return;
     }
-    success(
-      "Update successful! The page will be reload after 10s to see the results."
+    tip(
+      "Update transaction has been submitted! Pleaase wait until transaction is processed."
     );
+    await result?.wait();
+    success("Update successful! The page will be reload after 10s.");
     endUpload();
     onClose();
   };

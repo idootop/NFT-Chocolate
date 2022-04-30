@@ -1,29 +1,32 @@
 import {
-    useErrorToast, useIsPC,
-    useMint,
-    useNFT,
-    useNFTColor,
-    useNFTName,
-    useSuccessToast
+  useErrorToast,
+  useIsPC,
+  useMint,
+  useNFT,
+  useNFTColor,
+  useNFTName,
+  useSuccessToast,
+  useSwitchNetwork,
+  useTipToast,
 } from "@/hooks";
 import { ipfsUpload, isEmpty } from "@/utils";
 import { AddIcon } from "@chakra-ui/icons";
 import {
-    Box,
-    Button,
-    FormControl,
-    FormLabel,
-    Input,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Spinner,
-    useBoolean,
-    useDisclosure
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Spinner,
+  useBoolean,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { nextTick } from "process";
 import { useState } from "react";
@@ -32,6 +35,7 @@ import { useAccount } from "wagmi";
 
 export function Mint() {
   const isPC = useIsPC();
+  const tip = useTipToast();
   const toast = useErrorToast();
   const success = useSuccessToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
@@ -39,6 +43,7 @@ export function Mint() {
   const { data: account } = useAccount();
   const nftColor = useNFTColor();
   const nftName = useNFTName();
+  const switchNetwork = useSwitchNetwork();
   const isRICH = useNFT() === "rich";
   const [nft, setNFT] = useState({
     to: account?.address,
@@ -88,6 +93,10 @@ export function Mint() {
       toast("Please set your NFT image first!");
       return;
     }
+    if (!(await switchNetwork())) {
+      toast("Please switch your network to Polygon first!");
+      return;
+    }
     startUpload();
     const uri = await ipfsUpload(nft.image);
     if (!uri) {
@@ -101,9 +110,11 @@ export function Mint() {
       endUpload();
       return;
     }
-    success(
-      "Mint successful! The page will be reload after 10s to see the results."
+    tip(
+      "Minting transaction has been submitted! Pleaase wait until transaction is processed."
     );
+    await result?.wait();
+    success("Minting successful! The page will be reload after 10s.");
     endUpload();
     onClose();
   };

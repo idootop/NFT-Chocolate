@@ -1,7 +1,7 @@
 import coinbase from "@/assets/coinbase.svg";
 import metamask from "@/assets/metamask.svg";
 import walletconnect from "@/assets/walletconnect.svg";
-import { useErrorToast, useNFTColor } from "@/hooks";
+import { useErrorToast, useNFTColor, useSwitchNetwork } from "@/hooks";
 import { shortenAddress } from "@/utils";
 import { ensAvatar } from "@/utils/assets_url";
 import {
@@ -21,9 +21,18 @@ export function ConnectButton() {
   const { data: ensName } = useEnsName();
   const { disconnect } = useDisconnect();
   const nftColor = useNFTColor();
+  const switchNetwork = useSwitchNetwork();
   const { connectors, connect } = useConnect({
     onError(error) {
       toast(error?.message ?? "Failed to connect");
+    },
+    onConnect() {
+      setTimeout(async () => {
+        if (!(await switchNetwork())) {
+          toast("Please switch your network to Polygon first!");
+          return;
+        }
+      }, 1000);
     },
   });
 
