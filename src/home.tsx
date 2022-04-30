@@ -104,7 +104,7 @@ function ALink(p: { to: "iu" | "rich"; text: string }) {
   return (
     <Link
       as={ReachLink}
-      to={"/NFT-Chocolate/index.html?nft=" + p.to}
+      to={"/index.html?nft=" + p.to}
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       _hover={{ textDecoration: "none" }}
     >
