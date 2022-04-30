@@ -101,6 +101,7 @@ function MyNFT() {
 function ALink(p: { to: "iu" | "rich"; text: string }) {
   return (
     <Kbd
+      cursor="pointer"
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       onClick={() => {
         window.open("/NFT-Chocolate/index.html?nft=" + p.to)?.focus();
