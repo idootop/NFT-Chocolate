@@ -6,11 +6,12 @@ import {
   Center,
   HStack,
   Image,
-  Kbd, SimpleGrid,
+  Kbd,
+  SimpleGrid,
   Spacer,
   Spinner,
   Text,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
@@ -102,7 +103,7 @@ function ALink(p: { to: "iu" | "rich"; text: string }) {
     <Kbd
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       onClick={() => {
-        window.open("/index.html?nft=" + p.to)?.focus();
+        window.open("/NFT-Chocolate/index.html?nft=" + p.to)?.focus();
       }}
     >
       {p.text}
