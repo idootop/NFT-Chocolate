@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/NFT-Chocolate/static/css/main.9c6f9b40.css",
-    "main.js": "/NFT-Chocolate/static/js/main.25b7203a.js",
+    "main.js": "/NFT-Chocolate/static/js/main.1967130c.js",
     "static/js/27.259d8acd.chunk.js": "/NFT-Chocolate/static/js/27.259d8acd.chunk.js",
     "static/js/563.e6d2823b.chunk.js": "/NFT-Chocolate/static/js/563.e6d2823b.chunk.js",
     "static/js/84.6a289a53.chunk.js": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js",
@@ -17,13 +17,13 @@
     "index.html": "/NFT-Chocolate/index.html",
     "static/media/down.svg": "/NFT-Chocolate/static/media/down.74b0ea515aaaf8653c34f975ac9c0894.svg",
     "main.9c6f9b40.css.map": "/NFT-Chocolate/static/css/main.9c6f9b40.css.map",
-    "main.25b7203a.js.map": "/NFT-Chocolate/static/js/main.25b7203a.js.map",
+    "main.1967130c.js.map": "/NFT-Chocolate/static/js/main.1967130c.js.map",
     "84.6a289a53.chunk.js.map": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js.map",
     "419.b30ae3e4.chunk.js.map": "/NFT-Chocolate/static/js/419.b30ae3e4.chunk.js.map",
     "163.a3b59883.chunk.js.map": "/NFT-Chocolate/static/js/163.a3b59883.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9c6f9b40.css",
-    "static/js/main.25b7203a.js"
+    "static/js/main.1967130c.js"
   ]
 }
