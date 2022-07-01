@@ -47,6 +47,7 @@ import {
 import { nextTick } from "process";
 import { useState } from "react";
 import ImageUploader from "react-images-upload";
+import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
@@ -59,12 +60,15 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
   const { uri, isLoading } = useTokenURI(p.tokenID);
   const nft = JSON.parse(uri ?? "{}");
   nft.tokenID = p.tokenID;
-  const isWorld = useLand() == null;
+  const land = useLand();
+  const isWorld = land == null;
   const account = !p.isMine
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useOwnerOf(p.tokenID)
     : // eslint-disable-next-line react-hooks/rules-of-hooks
       useAccount().data?.address;
+  const jumpTo = useNavigate();
+
   return !uri ? (
     <div />
   ) : (
@@ -95,8 +99,11 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
           cursor="pointer"
           onClick={() => {
             if (!p.isMine) {
-              // todo jump to Land page
-              window.open(openseaURL(p.tokenID, isWorld), "_blank")?.focus();
+              if (isWorld) {
+                jumpTo(`/index.html?land=${nft.land}&id=${p.tokenID}`);
+              } else {
+                window.open(openseaURL(p.tokenID, land), "_blank")?.focus();
+              }
             }
           }}
         >

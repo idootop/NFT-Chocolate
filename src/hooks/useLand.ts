@@ -3,17 +3,22 @@ import { useSearchParams } from "react-router-dom";
 
 export function useLand() {
   const land = useSearchParams()[0].get("land");
-  return isEmpty(land ?? "") ? null : parseInt(land ?? "0");
+  return isEmpty(land ?? "") ? null : land;
+}
+
+export function useLandID() {
+  const id = useSearchParams()[0].get("id");
+  return isEmpty(id ?? "") ? null : parseInt(id ?? "0");
 }
 
 export function useNFTName(full = true) {
-  const land = useLand();
-  return land == null
+  const id = useLandID();
+  return id == null
     ? full
       ? "Decentralized World"
       : "World"
     : full
-    ? `Decentralized Land #${land}` //todo 从world中查询land的信息
+    ? `Decentralized Land #${id}`
     : "Land";
 }
 

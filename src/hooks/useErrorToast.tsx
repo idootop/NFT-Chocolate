@@ -28,7 +28,7 @@ export function useErrorToast() {
 
 function CountDown(p: { text: string }) {
   const n = useRef(0);
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(3);
   n.current = count;
   useEffect(() => {
     const timer = setInterval(() => {
@@ -54,7 +54,7 @@ function CountDown(p: { text: string }) {
       color="#282828"
       boxShadow="0px 3px 5px rgba(0,0,0,0.04)"
     >
-      {p.text.replace("10s", `${count}s`)}
+      {p.text.replace("3s", `${count}s`)}
     </Center>
   );
 }

@@ -1,5 +1,3 @@
-import { kIUContractAddress, kRICHContractAddress } from "./config";
-
 export function ensAvatar(address: string) {
   return "https://stamp.fyi/avatar/" + address;
 }
@@ -10,8 +8,6 @@ export function nftSrc(src: string) {
     : src;
 }
 
-export function openseaURL(tokenID: number, isRICH: boolean) {
-  return `https://rarible.com/token/polygon/${
-    isRICH ? kRICHContractAddress : kIUContractAddress
-  }:${tokenID}`.toLowerCase();
+export function openseaURL(tokenID: number, address: string) {
+  return `https://rarible.com/token/polygon/${address}:${tokenID}`.toLowerCase();
 }

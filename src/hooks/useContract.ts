@@ -1,16 +1,12 @@
 import {
-  clamp,
   decodeTokenURI,
   kIsProd,
-  kIUContractConfig,
-  kOneETH,
-  kRICHContractConfig,
-  range,
+  kWorldContractConfig,
+  kLandContractConfig,
 } from "@/utils";
-import { readContract, writeContract } from "@wagmi/core";
+import { writeContract } from "@wagmi/core";
 import { useContractEvent, useContractRead, useNetwork } from "wagmi";
 import { useErrorToast } from ".";
-import { useAsync } from "./useAsync";
 import { useLand } from "./useLand";
 
 const noWatch = {
@@ -32,30 +28,23 @@ export function useEventListener(event: string, listener: (e: any) => any) {
 }
 
 export function useContractConfig() {
-  const isWorld = useLand() == null;
-  return isWorld ? kRICHContractConfig : kIUContractConfig;
+  const land = useLand();
+  const isWorld = land == null;
+  return isWorld ? kWorldContractConfig : kLandContractConfig(land!);
 }
 
 export function useMint(nft: any) {
-  const isWorld = useLand() == null;
   const config = useContractConfig();
   const toast = useErrorToast();
   return () =>
     writeContract(config, "mint", {
-      args: !isWorld
-        ? [nft.to, nft.desp, nft.image]
-        : [nft.to, nft.name, nft.desp, nft.image],
-      overrides: {
-        value: isWorld ? kOneETH : 0,
-      },
+      args: [nft.to, nft.desp, nft.image],
       ...noWatch,
     }).catch((e: any) => {
       if (e) {
         toast(
           e?.data?.message?.includes("revert")
-            ? isWorld
-              ? "At least 1 MATIC needs to be paid to mint 1 RICH."
-              : "Each person can only have 1 IU Chocolate."
+            ? "Something went wrong!"
             : e?.data?.message
             ? e?.data?.message
             : e.toString()
@@ -66,14 +55,11 @@ export function useMint(nft: any) {
 }
 
 export function useUpdate(nft: any) {
-  const isWorld = useLand() == null;
   const config = useContractConfig();
   const toast = useErrorToast();
   return () =>
     writeContract(config, "update", {
-      args: !isWorld
-        ? [nft.tokenID, nft.desp, nft.image]
-        : [nft.tokenID, nft.name, nft.desp, nft.image],
+      args: [nft.tokenID, nft.desp, nft.image],
       ...noWatch,
     }).catch((e: any) => {
       if (e) {
@@ -87,23 +73,6 @@ export function useUpdate(nft: any) {
       }
       return 404;
     });
-}
-
-export function useLast10NFT() {
-  const { data: totalSupply } = useTotalSupply();
-  const config = useContractConfig();
-  const tokenURI = (tokenID: number) =>
-    readContract(config, "tokenURI", {
-      args: [tokenID],
-    });
-
-  const query = () =>
-    Promise.all(
-      range(clamp(totalSupply as any, 0, 9), (index) =>
-        tokenURI((totalSupply as any) - index - 1)
-      )
-    );
-  return useAsync(query);
 }
 
 export function useTotalSupply() {
@@ -146,4 +115,17 @@ export function useTokenOfOwnerByIndex(owner: string, index: number) {
     ...noWatch,
   });
   return contractRead.data as unknown as number;
+}
+
+export function useWorldMetadata(tokenID: number) {
+  const { data, isLoading } = useContractRead(
+    kWorldContractConfig,
+    "tokenURI",
+    {
+      args: [tokenID],
+      ...noWatch,
+    }
+  );
+  const metadata = JSON.parse(decodeTokenURI(data as any) ?? "{}");
+  return { metadata, isLoading };
 }

@@ -2,9 +2,7 @@ import {
   useErrorToast,
   useIsPC,
   useMint,
-  useLand,
   useNFTColor,
-  useNFTName,
   useSuccessToast,
   useSwitchNetwork,
   useTipToast,
@@ -42,9 +40,7 @@ export function Mint() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { data: account } = useAccount();
   const nftColor = useNFTColor();
-  const nftName = useNFTName();
   const switchNetwork = useSwitchNetwork();
-  const isWorld = useLand() == null;
   const [nft, setNFT] = useState({
     to: account?.address,
     name: "",
@@ -58,7 +54,6 @@ export function Mint() {
       ...nft,
       to: isEmpty(event.target.value) ? account?.address : event.target.value,
     });
-  const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
 
   const onDrop = (picture: any) => {
@@ -79,10 +74,6 @@ export function Mint() {
   const submit = async () => {
     if (isEmpty(nft.to)) {
       toast("Please set your NFT's owner address first!");
-      return;
-    }
-    if (isWorld && isEmpty(nft.name)) {
-      toast("Please set your NFT's name first!");
       return;
     }
     if (isEmpty(nft.desp)) {
@@ -111,10 +102,10 @@ export function Mint() {
       return;
     }
     tip(
-      "Minting transaction has been submitted! Pleaase wait until transaction is processed."
+      "Minting transaction has been submitted! Pleaase wait."
     );
     await result?.wait();
-    success("Minting successful! The page will be reload after 10s.");
+    success("Minting successful! The page will be reload after 3s.");
     endUpload();
     onClose();
   };
@@ -158,16 +149,6 @@ export function Mint() {
                 onChange={setTo}
               />
             </FormControl>
-            {isWorld && (
-              <FormControl mt={4}>
-                <FormLabel>Name</FormLabel>
-                <Input
-                  placeholder={nftName}
-                  value={nft.name}
-                  onChange={setName}
-                />
-              </FormControl>
-            )}
             <FormControl mt={4}>
               <FormLabel>Description</FormLabel>
               <Input

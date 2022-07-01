@@ -1,11 +1,9 @@
 import { providers } from "ethers";
 import { chain, createClient } from "wagmi";
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { kChainId, kIsProd } from "./config";
 
-const rpcUrl = chain.polygon.rpcUrls.alchemy;
 const alchemyKey = process.env.ALCHEMY_POLYGON_API_KEY;
 
 export const client: any = kIsProd
@@ -20,13 +18,6 @@ export const client: any = kIsProd
           chains: [chain.polygon],
           options: {
             qrcode: true,
-          },
-        }),
-        new CoinbaseWalletConnector({
-          chains: [chain.polygon],
-          options: {
-            appName: "IU Chocolate",
-            jsonRpcUrl: `${rpcUrl}/${alchemyKey}`,
           },
         }),
       ],

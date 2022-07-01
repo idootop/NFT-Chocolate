@@ -1,4 +1,3 @@
-import ethLogo from "@/assets/eth.svg";
 import { ConnectButton, Mint, NFT, OwnedNFT, Tabs } from "@/components";
 import {
   Box,
@@ -13,8 +12,14 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { useBalanceOf, useLand, useNFTName, useTotalSupply } from "./hooks";
-import { clamp, kZeroAddress, range } from "./utils";
+import {
+  useBalanceOf,
+  useLandID,
+  useNFTName,
+  useTotalSupply,
+  useWorldMetadata,
+} from "./hooks";
+import { clamp, kZeroAddress, nftSrc, range } from "./utils";
 
 function Home() {
   const [tab, setTab] = useState("All");
@@ -59,7 +64,7 @@ function AllNFT() {
     <CenterSpinner />
   ) : (totalSupply as any) > 0 ? (
     <NFTGrid>
-      {range(clamp(totalSupply as any, 0, 10)).map((idx) => (
+      {range(clamp(totalSupply as any, 0, 100)).map((idx) => (
         <Center key={idx}>
           <NFT tokenID={(totalSupply as any) - idx - 1} />
         </Center>
@@ -97,19 +102,30 @@ function MyNFT() {
 }
 
 function About() {
-  // const land = useLand();
+  const landID = useLandID();
   const fullName = useNFTName();
-  // todo image desp
-  return (
+  const { metadata: landMetadata, isLoading } = useWorldMetadata(landID ?? 0);
+  return isLoading || !landMetadata.image ? (
+    <CenterSpinner />
+  ) : (
     <VStack
       h="100%"
       justify="space-evenly"
       p="142px 32px 32px 32px"
       textAlign="center"
     >
-      <Image src={ethLogo} h="160px" />
+      <Image
+        src={nftSrc(landMetadata.image)}
+        h="160px"
+        w="160px"
+        borderRadius={"16px"}
+        fit={"cover"}
+      />
       <Text p="16px" fontSize="16px" fontWeight="bold">
         {fullName}
+      </Text>
+      <Text fontSize="32px" fontWeight="bold">
+        {landMetadata.description}
       </Text>
     </VStack>
   );
