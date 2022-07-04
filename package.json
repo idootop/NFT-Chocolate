@@ -2,6 +2,7 @@
   "name": "nft-chocolate",
   "version": "1.0.0",
   "private": true,
+  "homepage": "/web/decentralized-land",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "PROD=true react-app-rewired build",

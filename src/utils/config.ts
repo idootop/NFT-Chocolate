@@ -5,8 +5,8 @@ export const kIsProd = process.env.PROD;
 export const kChainId = 137;
 
 export const kWorldContractAddress = !kIsProd
-  ? "0xAbaB2BFe8Ab241bdBB4c03A5355CD142A5a15e85" //"0x547dd1f48aA2ae60c2f405BE2de0C25Fc631e82d"
-  : "0xCD5982A4D04F44D7987c87Dc30eD4856c1A64f14";
+  ? "0xcDE6Adc3B9E529269b4C73df9602672fF92529D7"
+  : "0x9d779B3722e1378E37c472fad28E2ebDf2184ee8";
 export const kWorldContractConfig = {
   addressOrName: kWorldContractAddress,
   contractInterface: world,

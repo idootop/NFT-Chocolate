@@ -23,7 +23,7 @@ root.render(
   <React.StrictMode>
     <Provider client={client}>
       <ChakraProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/web/decentralized-land">
           <App />
         </BrowserRouter>
       </ChakraProvider>
