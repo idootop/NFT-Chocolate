@@ -6,7 +6,7 @@ export function ensAvatar(address: string) {
 
 export function nftSrc(src: string) {
   return src.startsWith("ipfs://")
-    ? "https://cloudflare-ipfs.com/ipfs/" + src.substring(7)
+    ? "https://cloudflare-ipfs.com/ipfs/" + src.substring(7) 
     : src;
 }
 
