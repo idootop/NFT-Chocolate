@@ -2,7 +2,7 @@ import {
   useErrorToast,
   useIsPC,
   useMint,
-  useNFT,
+  useLand,
   useNFTColor,
   useNFTName,
   useSuccessToast,
@@ -44,7 +44,7 @@ export function Mint() {
   const nftColor = useNFTColor();
   const nftName = useNFTName();
   const switchNetwork = useSwitchNetwork();
-  const isRICH = useNFT() === "rich";
+  const isWorld = useLand() == null;
   const [nft, setNFT] = useState({
     to: account?.address,
     name: "",
@@ -81,7 +81,7 @@ export function Mint() {
       toast("Please set your NFT's owner address first!");
       return;
     }
-    if (isRICH && isEmpty(nft.name)) {
+    if (isWorld && isEmpty(nft.name)) {
       toast("Please set your NFT's name first!");
       return;
     }
@@ -158,7 +158,7 @@ export function Mint() {
                 onChange={setTo}
               />
             </FormControl>
-            {isRICH && (
+            {isWorld && (
               <FormControl mt={4}>
                 <FormLabel>Name</FormLabel>
                 <Input

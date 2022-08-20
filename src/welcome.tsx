@@ -21,7 +21,7 @@ function Welcome() {
             textShadow="5px 5px 10px rgba(0,0,0,0.3)"
             color="white"
           >
-            NFT Chocolate
+            Decentralized World
           </Text>
           <Box h="4"></Box>
           <Link to="/index.html">
