@@ -11,7 +11,7 @@ import { readContract, writeContract } from "@wagmi/core";
 import { useContractEvent, useContractRead, useNetwork } from "wagmi";
 import { useErrorToast } from ".";
 import { useAsync } from "./useAsync";
-import { useLand } from "./useLand";
+import { useNFT } from "./useNFT";
 
 const noWatch = {
   watch: false,
@@ -32,28 +32,28 @@ export function useEventListener(event: string, listener: (e: any) => any) {
 }
 
 export function useContractConfig() {
-  const isWorld = useLand() == null;
-  return isWorld ? kRICHContractConfig : kIUContractConfig;
+  const isRICH = useNFT() === "rich";
+  return isRICH ? kRICHContractConfig : kIUContractConfig;
 }
 
 export function useMint(nft: any) {
-  const isWorld = useLand() == null;
+  const isRICH = useNFT() === "rich";
   const config = useContractConfig();
   const toast = useErrorToast();
   return () =>
     writeContract(config, "mint", {
-      args: !isWorld
+      args: !isRICH
         ? [nft.to, nft.desp, nft.image]
         : [nft.to, nft.name, nft.desp, nft.image],
       overrides: {
-        value: isWorld ? kOneETH : 0,
+        value: isRICH ? kOneETH : 0,
       },
       ...noWatch,
     }).catch((e: any) => {
       if (e) {
         toast(
           e?.data?.message?.includes("revert")
-            ? isWorld
+            ? isRICH
               ? "At least 1 MATIC needs to be paid to mint 1 RICH."
               : "Each person can only have 1 IU Chocolate."
             : e?.data?.message
@@ -66,12 +66,12 @@ export function useMint(nft: any) {
 }
 
 export function useUpdate(nft: any) {
-  const isWorld = useLand() == null;
+  const isRICH = useNFT() === "rich";
   const config = useContractConfig();
   const toast = useErrorToast();
   return () =>
     writeContract(config, "update", {
-      args: !isWorld
+      args: !isRICH
         ? [nft.tokenID, nft.desp, nft.image]
         : [nft.tokenID, nft.name, nft.desp, nft.image],
       ...noWatch,

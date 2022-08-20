@@ -1,5 +1,5 @@
 import down from "@/assets/down.svg";
-import { useIsPC, useLand, useNFTName } from "@/hooks";
+import { useIsPC, useNFT } from "@/hooks";
 import {
   HStack,
   Image,
@@ -12,14 +12,13 @@ import {
 
 export function Tabs(p: { tab: string; setTab: (tab: string) => void }) {
   const isPC = useIsPC();
-  const isWorld = useLand() == null;
-  const fullName = useNFTName();
-  const shortName = useNFTName(false);
-  const tabs = isWorld ? [shortName, "My"] : [shortName, "My", "About"];
-  const tabsMenu = isWorld
-    ? [fullName, `My ${shortName}`]
-    : [fullName, `My ${shortName}`, "About"];
-  const options = isWorld ? ["All", "My"] : ["All", "My", "About"];
+  const nft = useNFT();
+  const tabs = nft === "iu" ? ["IU", "My", "About"] : ["RICH", "My", "About"];
+  const tabsMenu =
+    nft === "iu"
+      ? ["IU Chocolate", "My Chocolate", "About"]
+      : ["Pretend I'M RICH", "My RICH", "About"];
+  const options = ["All", "My", "About"];
   const setTab = (o: string) => {
     p.setTab(options[tabsMenu.indexOf(o)]);
   };

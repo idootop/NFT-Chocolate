@@ -3,7 +3,7 @@ import { Position, ZStack } from "@/components";
 import {
   useErrorToast,
   useIsPC,
-  useLand,
+  useNFT,
   useNFTName,
   useOwnerOf,
   useSuccessToast,
@@ -59,7 +59,7 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
   const { uri, isLoading } = useTokenURI(p.tokenID);
   const nft = JSON.parse(uri ?? "{}");
   nft.tokenID = p.tokenID;
-  const isWorld = useLand() == null;
+  const isRICH = useNFT() === "rich";
   const account = !p.isMine
     ? // eslint-disable-next-line react-hooks/rules-of-hooks
       useOwnerOf(p.tokenID)
@@ -94,10 +94,8 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
           p="16px"
           cursor="pointer"
           onClick={() => {
-            if (!p.isMine) {
-              // todo jump to Land page
-              window.open(openseaURL(p.tokenID, isWorld), "_blank")?.focus();
-            }
+            if (!p.isMine)
+              window.open(openseaURL(p.tokenID, isRICH), "_blank")?.focus();
           }}
         >
           <AspectRatio ratio={1} w="100%" borderRadius="16px" overflow="hidden">
@@ -159,7 +157,7 @@ function EditMask(p: {
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const nftName = useNFTName();
-  const isWorld = useLand() == null;
+  const isRICH = useNFT() === "rich";
   const [nft, setNFT] = useState({
     to: "",
     name: "",
@@ -189,7 +187,7 @@ function EditMask(p: {
   };
   const submit = async () => {
     if (!p.isMine) return;
-    if (isWorld && isEmpty(nft.name)) {
+    if (isRICH && isEmpty(nft.name)) {
       toast("Please set your NFT's name first!");
       return;
     }
@@ -259,7 +257,7 @@ function EditMask(p: {
           <ModalHeader>Update Metadata</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            {isWorld && (
+            {isRICH && (
               <FormControl>
                 <FormLabel>Name</FormLabel>
                 <Input
@@ -269,7 +267,7 @@ function EditMask(p: {
                 />
               </FormControl>
             )}
-            <FormControl mt={isWorld ? 4 : 0}>
+            <FormControl mt={isRICH ? 4 : 0}>
               <FormLabel>Description</FormLabel>
               <Input
                 placeholder="What's it?"

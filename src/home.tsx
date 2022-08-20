@@ -1,10 +1,12 @@
 import ethLogo from "@/assets/eth.svg";
+import polygonLogo from "@/assets/polygon.svg";
 import { ConnectButton, Mint, NFT, OwnedNFT, Tabs } from "@/components";
 import {
   Box,
   Center,
   HStack,
   Image,
+  Kbd,
   SimpleGrid,
   Spacer,
   Spinner,
@@ -13,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { useBalanceOf, useLand, useNFTName, useTotalSupply } from "./hooks";
+import { useBalanceOf, useNFT, useTotalSupply } from "./hooks";
 import { clamp, kZeroAddress, range } from "./utils";
 
 function Home() {
@@ -96,10 +98,23 @@ function MyNFT() {
   );
 }
 
+function ALink(p: { to: "iu" | "rich"; text: string }) {
+  const nft = useNFT();
+  return (
+    <Kbd
+      cursor="pointer"
+      color={p.to === "iu" ? "#3173e0" : "#7b4add"}
+      onClick={() => {
+        if (nft === p.to) return;
+        window.open("/NFT-Chocolate/index.html?nft=" + p.to)?.focus();
+      }}
+    >
+      {p.text}
+    </Kbd>
+  );
+}
+
 function About() {
-  // const land = useLand();
-  const fullName = useNFTName();
-  // todo image desp
   return (
     <VStack
       h="100%"
@@ -109,7 +124,18 @@ function About() {
     >
       <Image src={ethLogo} h="160px" />
       <Text p="16px" fontSize="16px" fontWeight="bold">
-        {fullName}
+        You can mint one <ALink to="iu" text="IU Chocolate for FREE" /> or{" "}
+        <ALink to="rich" text="1 RICH for 1 MATIC" />.
+      </Text>
+      <Box h="32px" />
+      <Image src={polygonLogo} w="120px" />
+      <Text p="16px" fontSize="16px" fontWeight="bold">
+        Once you have an <ALink to="iu" text="IU" /> or{" "}
+        <ALink to="rich" text="RICH" />, you can update their metadata at any
+        time for free.
+      </Text>
+      <Text p="16px" fontSize="12px" color="#8c939a">
+        *You only need to pay the GAS fee.
       </Text>
     </VStack>
   );
