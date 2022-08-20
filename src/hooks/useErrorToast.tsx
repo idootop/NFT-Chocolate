@@ -1,7 +1,7 @@
 import { Center, useToast } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
-import { useNFTColor } from "./useNFT";
+import { useNFTColor } from "./useLand";
 
 export function useErrorToast() {
   const toast = useToast();
