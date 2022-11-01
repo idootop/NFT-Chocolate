@@ -1,12 +1,11 @@
 {
   "files": {
     "main.css": "/NFT-Chocolate/static/css/main.9c6f9b40.css",
-    "main.js": "/NFT-Chocolate/static/js/main.aeb584fb.js",
+    "main.js": "/NFT-Chocolate/static/js/main.81020c8c.js",
     "static/js/27.259d8acd.chunk.js": "/NFT-Chocolate/static/js/27.259d8acd.chunk.js",
     "static/js/563.e6d2823b.chunk.js": "/NFT-Chocolate/static/js/563.e6d2823b.chunk.js",
-    "static/js/84.6a289a53.chunk.js": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js",
-    "static/js/419.b30ae3e4.chunk.js": "/NFT-Chocolate/static/js/419.b30ae3e4.chunk.js",
-    "static/js/163.a3b59883.chunk.js": "/NFT-Chocolate/static/js/163.a3b59883.chunk.js",
+    "static/js/419.853c5eac.chunk.js": "/NFT-Chocolate/static/js/419.853c5eac.chunk.js",
+    "static/js/163.dedbab1f.chunk.js": "/NFT-Chocolate/static/js/163.dedbab1f.chunk.js",
     "static/media/bg.png": "/NFT-Chocolate/static/media/bg.96984f7b0e2d399e8b13.png",
     "static/media/metamask.svg": "/NFT-Chocolate/static/media/metamask.968cb5bd26336adf461aa7f31af616ff.svg",
     "static/media/UploadIcon.svg": "/NFT-Chocolate/static/media/UploadIcon.469126df4127e870c21611e576b85d00.svg",
@@ -17,13 +16,12 @@
     "index.html": "/NFT-Chocolate/index.html",
     "static/media/down.svg": "/NFT-Chocolate/static/media/down.74b0ea515aaaf8653c34f975ac9c0894.svg",
     "main.9c6f9b40.css.map": "/NFT-Chocolate/static/css/main.9c6f9b40.css.map",
-    "main.aeb584fb.js.map": "/NFT-Chocolate/static/js/main.aeb584fb.js.map",
-    "84.6a289a53.chunk.js.map": "/NFT-Chocolate/static/js/84.6a289a53.chunk.js.map",
-    "419.b30ae3e4.chunk.js.map": "/NFT-Chocolate/static/js/419.b30ae3e4.chunk.js.map",
-    "163.a3b59883.chunk.js.map": "/NFT-Chocolate/static/js/163.a3b59883.chunk.js.map"
+    "main.81020c8c.js.map": "/NFT-Chocolate/static/js/main.81020c8c.js.map",
+    "419.853c5eac.chunk.js.map": "/NFT-Chocolate/static/js/419.853c5eac.chunk.js.map",
+    "163.dedbab1f.chunk.js.map": "/NFT-Chocolate/static/js/163.dedbab1f.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9c6f9b40.css",
-    "static/js/main.aeb584fb.js"
+    "static/js/main.81020c8c.js"
   ]
 }
