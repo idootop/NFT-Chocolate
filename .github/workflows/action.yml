@@ -26,11 +26,15 @@ jobs:
 
       # 第三步 安装依赖打包
       - name: Install and Build 🔧  
+        shell: bash
+        env:
+          ALCHEMY_POLYGON_API_KEY: ${{ secrets.ALCHEMY_POLYGON_API_KEY }}
+          WEB3_STORAGE_API_KEY: ${{ secrets.WEB3_STORAGE_API_KEY }}
         run: |
+          echo $ALCHEMY_POLYGON_API_KEY
           npm install -g yarn
           yarn install
           yarn build
-        shell: bash
 
       # 第四步 将打包后的文件推送至下面填写的分支，部署到github的静态页
       - name: Deploy 🚀 

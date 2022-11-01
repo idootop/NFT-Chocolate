@@ -4,14 +4,12 @@ export function ensAvatar(address: string) {
   return "https://stamp.fyi/avatar/" + address;
 }
 
+const _newIPFSClient = "https://cloudflare-ipfs.com/ipfs/";
+const _oldIPFSClient = "https://ipfs.infura.io/ipfs/";
 export function nftSrc(src: string) {
-  let newSrc = src.replace(
-    "https://ipfs.infura.io/ipfs/",
-    "https://cloudflare-ipfs.com/ipfs/"
-  );
-  return newSrc.startsWith("ipfs://")
-    ? "https://cloudflare-ipfs.com/ipfs/" + newSrc.substring(7)
-    : newSrc;
+  return src.startsWith("ipfs://")
+    ? _newIPFSClient + src.substring(7)
+    : src.replace(_oldIPFSClient, _newIPFSClient);
 }
 
 export function openseaURL(tokenID: number, isRICH: boolean) {
