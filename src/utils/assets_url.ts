@@ -2,10 +2,12 @@ export function ensAvatar(address: string) {
   return "https://stamp.fyi/avatar/" + address;
 }
 
+const _newIPFSClient = "https://cloudflare-ipfs.com/ipfs/";
+const _oldIPFSClient = "https://ipfs.infura.io/ipfs/";
 export function nftSrc(src: string) {
   return src.startsWith("ipfs://")
-    ? "https://cloudflare-ipfs.com/ipfs/" + src.substring(7)
-    : src;
+    ? _newIPFSClient + src.substring(7)
+    : src.replace(_oldIPFSClient, _newIPFSClient);
 }
 
 export function openseaURL(tokenID: number, address: string) {
