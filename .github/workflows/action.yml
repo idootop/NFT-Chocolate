@@ -31,7 +31,6 @@ jobs:
           ALCHEMY_POLYGON_API_KEY: ${{ secrets.ALCHEMY_POLYGON_API_KEY }}
           WEB3_STORAGE_API_KEY: ${{ secrets.WEB3_STORAGE_API_KEY }}
         run: |
-          echo $ALCHEMY_POLYGON_API_KEY
           npm install -g yarn
           yarn install
           yarn build
