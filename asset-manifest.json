@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/NFT-Chocolate/static/css/main.9c6f9b40.css",
+    "main.css": "/NFT-Chocolate/static/css/main.8ba11124.css",
     "main.js": "/NFT-Chocolate/static/js/main.53b23d20.js",
     "static/js/27.259d8acd.chunk.js": "/NFT-Chocolate/static/js/27.259d8acd.chunk.js",
     "static/js/563.e6d2823b.chunk.js": "/NFT-Chocolate/static/js/563.e6d2823b.chunk.js",
@@ -15,13 +15,13 @@
     "static/media/coinbase.svg": "/NFT-Chocolate/static/media/coinbase.5074806074f37ccfae2acb7be30aa6c4.svg",
     "index.html": "/NFT-Chocolate/index.html",
     "static/media/down.svg": "/NFT-Chocolate/static/media/down.74b0ea515aaaf8653c34f975ac9c0894.svg",
-    "main.9c6f9b40.css.map": "/NFT-Chocolate/static/css/main.9c6f9b40.css.map",
+    "main.8ba11124.css.map": "/NFT-Chocolate/static/css/main.8ba11124.css.map",
     "main.53b23d20.js.map": "/NFT-Chocolate/static/js/main.53b23d20.js.map",
     "419.853c5eac.chunk.js.map": "/NFT-Chocolate/static/js/419.853c5eac.chunk.js.map",
     "163.dedbab1f.chunk.js.map": "/NFT-Chocolate/static/js/163.dedbab1f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9c6f9b40.css",
+    "static/css/main.8ba11124.css",
     "static/js/main.53b23d20.js"
   ]
 }
