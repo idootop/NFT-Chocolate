@@ -18,5 +18,5 @@ export const kRICHContractConfig = {
   addressOrName: kRICHContractAddress,
   contractInterface: rich,
 };
-export const kOneETH = 10 ** 18;
+export const kOneETH = 10n ** 18n;
 export const kZeroAddress = "0x0000000000000000000000000000000000000000";
