@@ -1,15 +1,13 @@
-# NFT Chocolate
+# 🍬 NFT Chocolate
 
-![](./screenshots/home2.png)
+Experience the ultimate in flexibility and ownership with [NFT Chocolate](https://idootop.github.io/NFT-Chocolate/index.html?nft=iu).
 
-## IU Chocolate
+Mint your own unique collection of sweet NFTs and customize their metadata to suit your preferences. 
 
-![](./screenshots/home3.png)
+Enjoy complete control over your NFTs, as their metadata is securely recorded on the blockchain and only you can change, sell, or destroy them.
 
-**[Mint IU Chocolate now!](https://idootop.github.io/NFT-Chocolate/index.html?nft=iu)**
+Plus, minting your own NFT Chocolate collection is completely free! Don't miss this opportunity to create your own unique and customizable NFTs. 
 
-## Pretend I'M RICH
+# 👉 **[Get started today!](https://idootop.github.io/NFT-Chocolate/index.html?nft=iu)**
 
 ![](./screenshots/home1.png)
-
-**[Mint 1 RICH now!](https://idootop.github.io/NFT-Chocolate/index.html?nft=rich)**

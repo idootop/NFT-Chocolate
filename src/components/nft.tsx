@@ -234,6 +234,7 @@ function EditMask(p: {
         color="transparent"
         fontSize="16px"
         fontWeight="bold"
+        userSelect="none"
         _hover={
           p.isMine
             ? {
