@@ -23,7 +23,7 @@ root.render(
   <React.StrictMode>
     <Provider client={client}>
       <ChakraProvider>
-        <BrowserRouter basename="/NFT-Chocolate">
+        <BrowserRouter>
           <App />
         </BrowserRouter>
       </ChakraProvider>

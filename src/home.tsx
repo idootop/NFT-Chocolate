@@ -106,7 +106,7 @@ function ALink(p: { to: "iu" | "rich"; text: string }) {
       color={p.to === "iu" ? "#3173e0" : "#7b4add"}
       onClick={() => {
         if (nft === p.to) return;
-        window.open("/NFT-Chocolate/index.html?nft=" + p.to)?.focus();
+        window.open("/index.html?nft=" + p.to)?.focus();
       }}
     >
       {p.text}
