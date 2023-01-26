@@ -1,7 +1,7 @@
 import { LButton, ZStack } from "@/components";
 import { Box, Center, Image, Text, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import bg from "./assets/bg.png";
+import bg from "./assets/bg.jpg";
 
 function Welcome() {
   return (
