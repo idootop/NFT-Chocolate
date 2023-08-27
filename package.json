@@ -7,12 +7,12 @@
     "preview": "PROD=true react-app-rewired build && browser-sync start --server build"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^1.1.7",
-    "@chakra-ui/react": "^1.8.8",
-    "@emotion/react": "^11",
-    "@emotion/styled": "^11",
+    "@chakra-ui/icons": "^2.1.0",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "ethers": "^5.6.4",
-    "framer-motion": "^6",
+    "framer-motion": "^10.16.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-images-upload": "^1.2.8",
@@ -22,20 +22,20 @@
     "web3.storage": "^4.4.0"
   },
   "devDependencies": {
-    "typescript": "^4.4.2",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "dotenv-webpack": "^7.1.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "dotenv-webpack": "^7.1.0",
     "https-browserify": "^1.0.0",
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
     "react-app-rewired": "^2.2.1",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
+    "typescript": "^5.2.2",
     "url": "^0.11.0"
   },
   "eslintConfig": {
