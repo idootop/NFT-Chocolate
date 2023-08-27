@@ -30,6 +30,7 @@ jobs:
         env:
           ALCHEMY_POLYGON_API_KEY: ${{ secrets.ALCHEMY_POLYGON_API_KEY }}
           WEB3_STORAGE_API_KEY: ${{ secrets.WEB3_STORAGE_API_KEY }}
+          WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
         run: |
           npm install -g yarn
           yarn install

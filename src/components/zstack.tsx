@@ -1,41 +1,47 @@
 import { Box, ChakraComponent } from "@chakra-ui/react";
+import { Fragment } from "react";
 import { PositionProps } from "./position";
 
-export const ZStack: ChakraComponent<"div", {}> = (p) => {
-  const children = p.children as any;
-  if (!Array.isArray(p.children) || p.length < 1) return p.children;
+export const ZStack: ChakraComponent<"div", {}> = (props) => {
+  const children = ((props.children as any[]) ?? []).filter((e) => e);
+  if (!Array.isArray(children) || children.length < 1) return children;
   const target = children![0];
   let items = children.slice(1);
-  const content = items.find((e: any) => Array.isArray(e));
-  if (content !== undefined) {
-    const index = items.indexOf(content);
-    items.splice(index, 1);
-    items = [...items, ...content];
-  }
+  items = _flattenChildren(items);
   const contents = items.map((item: any, index: number) => {
     const p = item.props ?? {};
-    const position = generateStackPosition(p);
+    const position = _getStackPosition(p);
     const zIndex = p?.zIndex ?? 1;
+    const props = { ...p, ...position, zIndex, position: "absolute" };
+
     return (
-      <Box
-        key={index}
-        {...{ ...p, ...position }}
-        position="absolute"
-        zIndex={zIndex}
-      >
+      <Box key={index} {...props}>
         {item}
       </Box>
     );
   });
+
   return (
-    <Box {...p} position="relative">
+    <Box {...{ ...props, position: "relative" }}>
       {contents}
       {target}
     </Box>
   ) as any;
 };
 
-function generateStackPosition(p?: Partial<PositionProps>) {
+const _flattenChildren = (children: any): any => {
+  return Array.isArray(children)
+    ? [].concat(
+        ...children.map((c) =>
+          c?.type === Fragment
+            ? _flattenChildren(c.props.children)
+            : _flattenChildren(c)
+        )
+      )
+    : [children];
+};
+
+function _getStackPosition(p?: Partial<PositionProps>) {
   switch (p?.align) {
     case "topLeft":
       return {

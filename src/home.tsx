@@ -56,7 +56,8 @@ function Home() {
 }
 
 function AllNFT() {
-  const { data: totalSupply, isLoading } = useTotalSupply();
+  const { data: _totalSupply, isLoading } = useTotalSupply();
+  const totalSupply = Number(_totalSupply ?? 0);
   return isLoading ? (
     <CenterSpinner />
   ) : (totalSupply as any) > 0 ? (
@@ -76,13 +77,14 @@ function AllNFT() {
 }
 
 function MyNFT() {
-  const { data: account } = useAccount();
-  const { data: balance, isLoading } = useBalanceOf(
-    account?.address ?? kZeroAddress.replace("0x0", "0x1")
+  const { address } = useAccount();
+  const { data: _balance, isLoading } = useBalanceOf(
+    address ?? kZeroAddress.replace("0x0", "0x1")
   );
+  const balance = Number(_balance ?? 0);
   return isLoading ? (
     <CenterSpinner />
-  ) : account?.address && (balance as any) > 0 ? (
+  ) : address && (balance as any) > 0 ? (
     <NFTGrid>
       {range(balance as any).map((idx) => (
         <Center key={idx}>

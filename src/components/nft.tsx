@@ -47,11 +47,11 @@ import {
 import { nextTick } from "process";
 import { useState } from "react";
 import ImageUploader from "react-images-upload";
-import { useAccount } from "wagmi";
+import { useAccount, useEnsName } from "wagmi";
 
 export function OwnedNFT(p: { index: number }) {
-  const { data: account } = useAccount();
-  const tokenID = useTokenOfOwnerByIndex(account!.address!, p.index);
+  const { address } = useAccount();
+  const tokenID = useTokenOfOwnerByIndex(address!, p.index);
   return <NFT tokenID={tokenID} isMine />;
 }
 
@@ -60,11 +60,10 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
   const nft = JSON.parse(uri ?? "{}");
   nft.tokenID = p.tokenID;
   const isRICH = useNFT() === "rich";
-  const account = !p.isMine
-    ? // eslint-disable-next-line react-hooks/rules-of-hooks
-      useOwnerOf(p.tokenID)
-    : // eslint-disable-next-line react-hooks/rules-of-hooks
-      useAccount().data?.address;
+  const { address: my_address } = useAccount();
+  const owner_address = useOwnerOf(p.tokenID);
+  const address: any = !p.isMine ? owner_address : my_address;
+  const { data: ensName } = useEnsName({ address, chainId: 1 });
   return !uri ? (
     <div />
   ) : (
@@ -132,11 +131,11 @@ export function NFT(p: { tokenID: number; isMine?: boolean }) {
               <Image
                 w="24px"
                 borderRadius="50%"
-                src={ensAvatar(account ?? "")}
-                alt={account}
+                src={ensAvatar(address)}
+                alt={address}
               />
               <Text maxWidth="120px" overflow="clip" fontSize="14px">
-                {shortenAddress(account ?? "")}
+                {shortenAddress(ensName ?? address)}
               </Text>
             </HStack>
           </VStack>
@@ -163,11 +162,12 @@ function EditMask(p: {
     name: "",
     desp: "",
     image: undefined,
+    file: undefined,
     tokenID: p.nft.tokenID,
   });
   const writeUpdate = useUpdate(nft);
   const switchNetwork = useSwitchNetwork();
-  const setImg = (s: any) => setNFT({ ...nft, image: s });
+  const setImg = (file: any) => setNFT({ ...nft, file });
   const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
 
@@ -195,7 +195,7 @@ function EditMask(p: {
       toast("Please set your NFT's description first!");
       return;
     }
-    if (!nft.image) {
+    if (!nft.file) {
       toast("Please set your NFT image first!");
       return;
     }
@@ -204,7 +204,7 @@ function EditMask(p: {
       return;
     }
     startUpload();
-    const uri = await ipfsUpload(nft.image);
+    const uri = await ipfsUpload(nft.file);
     if (!uri) {
       toast(uri ?? "Upload Image to IPFS failure!");
       endUpload();
@@ -216,10 +216,6 @@ function EditMask(p: {
       endUpload();
       return;
     }
-    tip(
-      "Update transaction has been submitted! Pleaase wait until transaction is processed."
-    );
-    await result?.wait();
     success("Update successful! The page will be reload after 10s.");
     endUpload();
     onClose();
@@ -280,14 +276,14 @@ function EditMask(p: {
             <FormControl mt={4}>
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
-                withIcon={!nft.image}
-                withPreview={nft.image ? true : false}
+                withIcon={!nft.file}
+                withPreview={nft.file ? true : false}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}
                 buttonText="Choose Image"
                 buttonStyles={{
-                  display: nft.image ? "none" : undefined,
+                  display: nft.file ? "none" : undefined,
                 }}
                 fileContainerStyle={{
                   border: "1px dashed #cccccc",

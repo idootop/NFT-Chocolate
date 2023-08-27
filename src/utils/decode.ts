@@ -1,7 +1,7 @@
-import { base64, toUtf8String } from "ethers/lib/utils";
+import { bytesToString } from "viem";
 
 export function decodeTokenURI(jsonStr?: string) {
   if (!jsonStr) return undefined;
   const json = jsonStr.replace("data:application/json;base64,", "");
-  return toUtf8String(base64.decode(json));
+  return bytesToString(Buffer.from(json, "base64"));
 }

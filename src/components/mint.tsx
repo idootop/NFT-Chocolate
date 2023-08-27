@@ -40,23 +40,24 @@ export function Mint() {
   const success = useSuccessToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data: account } = useAccount();
+  const { address } = useAccount();
   const nftColor = useNFTColor();
   const nftName = useNFTName();
   const switchNetwork = useSwitchNetwork();
   const isRICH = useNFT() === "rich";
   const [nft, setNFT] = useState({
-    to: account?.address,
+    to: address,
     name: "",
     desp: "",
     image: undefined,
+    file: undefined,
   });
   const writeMint = useMint(nft);
-  const setImg = (s: any) => setNFT({ ...nft, image: s });
+  const setImg = (file: any) => setNFT({ ...nft, file });
   const setTo = (event: any) =>
     setNFT({
       ...nft,
-      to: isEmpty(event.target.value) ? account?.address : event.target.value,
+      to: isEmpty(event.target.value) ? address : event.target.value,
     });
   const setName = (event: any) => setNFT({ ...nft, name: event.target.value });
   const setDesp = (event: any) => setNFT({ ...nft, desp: event.target.value });
@@ -70,7 +71,7 @@ export function Mint() {
   };
 
   const mint = (e: any) => {
-    if (!account?.address) {
+    if (!address) {
       toast("Please connect wallet first.");
       return;
     }
@@ -89,7 +90,7 @@ export function Mint() {
       toast("Please set your NFT's description first!");
       return;
     }
-    if (!nft.image) {
+    if (!nft.file) {
       toast("Please set your NFT image first!");
       return;
     }
@@ -98,7 +99,7 @@ export function Mint() {
       return;
     }
     startUpload();
-    const uri = await ipfsUpload(nft.image);
+    const uri = await ipfsUpload(nft.file);
     if (!uri) {
       toast(uri ?? "Upload Image to IPFS failure!");
       endUpload();
@@ -110,10 +111,6 @@ export function Mint() {
       endUpload();
       return;
     }
-    tip(
-      "Minting transaction has been submitted! Pleaase wait until transaction is processed."
-    );
-    await result?.wait();
     success("Minting successful! The page will be reload after 10s.");
     endUpload();
     onClose();
@@ -179,14 +176,14 @@ export function Mint() {
             <FormControl mt={4}>
               <FormLabel>NFT Image</FormLabel>
               <ImageUploader
-                withIcon={!nft.image}
-                withPreview={nft.image ? true : false}
+                withIcon={!nft.file}
+                withPreview={nft.file ? true : false}
                 singleImage
                 withLabel={false}
                 onChange={onDrop}
                 buttonText="Choose Image"
                 buttonStyles={{
-                  display: nft.image ? "none" : undefined,
+                  display: nft.file ? "none" : undefined,
                 }}
                 fileContainerStyle={{
                   border: "1px dashed #cccccc",

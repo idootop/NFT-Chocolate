@@ -17,8 +17,8 @@ import { useAccount, useConnect, useDisconnect, useEnsName } from "wagmi";
 
 export function ConnectButton() {
   const toast = useErrorToast();
-  const { data: account } = useAccount();
-  const { data: ensName } = useEnsName();
+  const { address } = useAccount();
+  const { data: ensName } = useEnsName({ address, chainId: 1 });
   const { disconnect } = useDisconnect();
   const nftColor = useNFTColor();
   const switchNetwork = useSwitchNetwork();
@@ -28,7 +28,7 @@ export function ConnectButton() {
     },
   });
   const onClickConnect = (connector: any) =>
-    connectAsync(connector)
+    connectAsync({ connector: connector })
       .catch(() => undefined)
       .then(async (e) => {
         if (!(await switchNetwork(e?.chain.id))) {
@@ -37,7 +37,7 @@ export function ConnectButton() {
         }
       });
 
-  if (account) {
+  if (address) {
     return (
       <Menu>
         <MenuButton
@@ -60,11 +60,11 @@ export function ConnectButton() {
             <Image
               w="24px"
               borderRadius="50%"
-              src={ensAvatar(account.address ?? "")}
-              alt={account.address}
+              src={ensAvatar(address)}
+              alt={address}
             />
             <Text maxWidth="120px" overflow="clip">
-              {shortenAddress(ensName ?? account.address)}
+              {shortenAddress(ensName ?? address)}
             </Text>
           </HStack>
         </MenuButton>
