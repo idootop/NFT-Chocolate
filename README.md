@@ -6,10 +6,10 @@
 
 ![](./screenshots/home3.png)
 
-**[Mint IU Chocolate now!](https://idootop.github.io/NFT-Chocolate/index.html?nft=iu)**
+**[Mint IU Chocolate now!](https://nft.xbox.work/index.html?nft=iu)**
 
 ## Pretend I'M RICH
 
 ![](./screenshots/home1.png)
 
-**[Mint 1 RICH now!](https://idootop.github.io/NFT-Chocolate/index.html?nft=rich)**
+**[Mint 1 RICH now!](https://nft.xbox.work/index.html?nft=rich)**
