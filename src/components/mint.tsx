@@ -7,7 +7,6 @@ import {
   useNFTName,
   useSuccessToast,
   useSwitchNetwork,
-  useTipToast,
 } from "@/hooks";
 import { ipfsUpload, isEmpty } from "@/utils";
 import { AddIcon } from "@chakra-ui/icons";
@@ -35,7 +34,6 @@ import { useAccount } from "wagmi";
 
 export function Mint() {
   const isPC = useIsPC();
-  const tip = useTipToast();
   const toast = useErrorToast();
   const success = useSuccessToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);

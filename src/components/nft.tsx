@@ -8,7 +8,6 @@ import {
   useOwnerOf,
   useSuccessToast,
   useSwitchNetwork,
-  useTipToast,
   useTokenOfOwnerByIndex,
   useTokenURI,
   useUpdate,
@@ -152,7 +151,6 @@ function EditMask(p: {
   const isPC = useIsPC();
   const toast = useErrorToast();
   const success = useSuccessToast();
-  const tip = useTipToast();
   const [uploading, { on: startUpload, off: endUpload }] = useBoolean(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const nftName = useNFTName();
