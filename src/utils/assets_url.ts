@@ -4,7 +4,7 @@ export function ensAvatar(address: string) {
   return "https://stamp.fyi/avatar/" + address;
 }
 
-const _newIPFSClient = "https://snapshot.mypinata.cloud/ipfs/";
+const _newIPFSClient = "https://nftstorage.link/ipfs/";
 const _oldIPFSClient = "https://ipfs.infura.io/ipfs/";
 export function nftSrc(src: string) {
   return src.startsWith("ipfs://")
