@@ -1,9 +1,24 @@
 import { isEmpty } from "./empty";
-import { Web3Storage } from "web3.storage";
 
-const web3StorageKey = process.env.WEB3_STORAGE_API_KEY!;
+const pinataJWT = process.env.PINATA_JWT!;
 
-const client = new Web3Storage({ token: web3StorageKey });
+const pinFileToIPFS = async (file: any) => {
+  const formData = new FormData();
+  formData.append("pinataMetadata", JSON.stringify({ name: file.name }));
+  formData.append("file", file);
+  try {
+    const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
+      method: "POST",
+      headers: { Authorization: "Bearer " + pinataJWT },
+      body: formData,
+    });
+    const data = (await res.json()).data;
+    return data?.IpfsHash;
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+};
 
 const uploadFileCaches: Record<string, string | undefined> = {};
 const getFileIdentity = (file: any) => {
@@ -20,7 +35,7 @@ export async function ipfsUpload(file: any) {
     return uploadFileCaches[file_identity];
   }
   try {
-    const cid = await client.put([file], { wrapWithDirectory: false });
+    const cid = await pinFileToIPFS(file);
     const src = "ipfs://" + cid;
     const result = isEmpty(cid) ? undefined : src;
     uploadFileCaches[file_identity] = result;
